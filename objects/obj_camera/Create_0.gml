@@ -102,6 +102,7 @@ player = {
     distance: 40,
     mouse_lock: true,
     frame: 0,
+    shape: new ColSphere(new Vector3(0, 0, 0 + 8), 8),
 };
 
 var data = buffer_load("player.vbuff");

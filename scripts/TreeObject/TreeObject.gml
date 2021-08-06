@@ -4,4 +4,5 @@ function TreeObject(model) constructor {
     self.x = dist * cos(angle);
     self.y = -dist * sin(angle);
     self.model = model;
+    self.shape = NewColAABBFromMinMax(new Vector3(self.x - 8, self.y - 8, 0), new Vector3(self.x + 8, self.y + 8, 32));
 }

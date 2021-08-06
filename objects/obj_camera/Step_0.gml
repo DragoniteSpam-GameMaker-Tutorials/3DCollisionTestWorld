@@ -40,15 +40,29 @@ with (player) {
             dy -= dsin(direction) * move_speed;
         }
         
-        //if (!c_overlap_position(c_object, x + dx, y, z)) {
-            //x += dx;
-        //}
-        x += dx;
+        shape.position.x = (x + dx);
+        for (var i = 0; i < TREE_COUNT; i++) {
+            var tree = obj_camera.tree_objects[i];
+            if (tree.shape.CheckSphere(shape)) {
+                dx = 0;
+                break;
+            }
+        }
         
-        //if (!c_overlap_position(c_object, x, y + dy, z)) {
-            //y += dy;
-        //}
+        x += dx;
+        shape.position.x = x;
+        
+        shape.position.y = (y + dy);
+        for (var i = 0; i < TREE_COUNT; i++) {
+            var tree = obj_camera.tree_objects[i];
+            if (tree.shape.CheckSphere(shape)) {
+                dy = 0;
+                break;
+            }
+        }
+        
         y += dy;
+        shape.position.y = y;
         
         if (point_distance(xlast, ylast, x, y) > 0.01) {
             frame = (frame + 0.075) % 3;
