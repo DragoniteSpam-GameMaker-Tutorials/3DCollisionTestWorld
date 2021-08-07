@@ -17,7 +17,7 @@ gpu_set_zwriteenable(true);
 gpu_set_ztestenable(true);
 shader_set(shd_demo);
 
-vertex_submit(vb_floor, pr_trianglelist, -1);
+//vertex_submit(vb_floor, pr_trianglelist, -1);
 
 var duck_angle = ((player.direction - player.face_direction) + 360) % 360;
 if (duck_angle >= 315 || duck_angle < 45) {

@@ -40,6 +40,8 @@ with (player) {
             dy -= dsin(direction) * move_speed;
         }
         
+        shape.position.z += 0.01;
+        
         shape.position.x = (x + dx);
         for (var i = 0; i < TREE_COUNT; i++) {
             var tree = obj_camera.tree_objects[i];
@@ -63,6 +65,25 @@ with (player) {
         
         y += dy;
         shape.position.y = y;
+        
+        shape.position.z -= 0.01;
+        
+        if (keyboard_check_pressed(vk_space)) {
+            zspeed = 2;
+        }
+        
+        shape.position.z = (z + zspeed + 8);
+        for (var i = 0; i < TREE_COUNT; i++) {
+            var tree = obj_camera.tree_objects[i];
+            if (tree.shape.CheckSphere(shape)) {
+                zspeed = 0;
+                break;
+            }
+        }
+        
+        z += zspeed;
+        shape.position.z = (z + zspeed + 8);
+        zspeed -= 0.075;
         
         if (point_distance(xlast, ylast, x, y) > 0.01) {
             frame = (frame + 0.075) % 3;

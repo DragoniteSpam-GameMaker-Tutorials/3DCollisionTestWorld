@@ -90,7 +90,8 @@ tree_models = [
 #macro TREE_COUNT 250
 
 tree_objects = array_create(TREE_COUNT);
-for (var i = 0; i < TREE_COUNT; i++) {
+tree_objects[0] = new FloorObject(vb_floor);
+for (var i = 1; i < TREE_COUNT; i++) {
     tree_objects[i] = new TreeObject(tree_models[irandom(array_length(tree_models) - 1)]);
 }
 #endregion
@@ -98,6 +99,7 @@ for (var i = 0; i < TREE_COUNT; i++) {
 #region player
 player = {
     x: 0, y: 0, z: 0,
+    zspeed: 0,
     direction: 0, pitch: -30, face_direction: 180,
     distance: 40,
     mouse_lock: true,
