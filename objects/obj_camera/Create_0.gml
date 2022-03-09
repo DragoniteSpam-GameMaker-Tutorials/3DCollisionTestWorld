@@ -52,34 +52,42 @@ vertex_end(vb_floor);
 #region trees
 var data = buffer_load("tree_simple.vbuff");
 vb_tree_simple = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_simple);
 buffer_delete(data);
 
 var data = buffer_load("tree_cone.vbuff");
 vb_tree_cone = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_cone);
 buffer_delete(data);
 
 var data = buffer_load("tree_cone_dark.vbuff");
 vb_tree_cone_dark = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_cone_dark);
 buffer_delete(data);
 
 var data = buffer_load("tree_detailed.vbuff");
 vb_tree_detailed = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_detailed);
 buffer_delete(data);
 
 var data = buffer_load("tree_fat.vbuff");
 vb_tree_fat = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_fat);
 buffer_delete(data);
 
 var data = buffer_load("tree_fat_dark.vbuff");
 vb_tree_fat_dark = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_fat_dark);
 buffer_delete(data);
 
 var data = buffer_load("tree_plateau.vbuff");
 vb_tree_plateau = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_plateau);
 buffer_delete(data);
 
 var data = buffer_load("tree_plateau_dark.vbuff");
 vb_tree_plateau_dark = vertex_create_buffer_from_buffer(data, format);
+vertex_freeze(vb_tree_plateau_dark);
 buffer_delete(data);
 
 tree_models = [
@@ -87,7 +95,7 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 250
+#macro TREE_COUNT 1000
 
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
@@ -122,6 +130,7 @@ vb_collision_block = vertex_create_buffer_from_buffer(data, format);
 buffer_delete(data);
 
 draw_debug_shapes = false;
+
 #endregion
 
 window_mouse_set(window_get_width() / 2, window_get_height() / 2);

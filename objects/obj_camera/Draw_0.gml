@@ -17,7 +17,7 @@ gpu_set_zwriteenable(true);
 gpu_set_ztestenable(true);
 shader_set(shd_demo);
 
-//vertex_submit(vb_floor, pr_trianglelist, -1);
+vertex_submit(vb_floor, pr_trianglelist, -1);
 
 var duck_angle = ((player.direction - player.face_direction) + 360) % 360;
 if (duck_angle >= 315 || duck_angle < 45) {
@@ -40,12 +40,16 @@ if (draw_debug_shapes) {
     vertex_submit(vb_collision_sphere, pr_trianglelist, -1);
 }
 
+var cutoff = dcos(60);
+
 for (var i = 0; i < TREE_COUNT; i++) {
     var tree = tree_objects[i];
-    matrix_set(matrix_world, matrix_build(tree.x, tree.y, 0, 0, 0, 0, 1, 1, 1));
-    vertex_submit(tree.model, pr_trianglelist, -1);
-    if (draw_debug_shapes) {
-        vertex_submit(vb_collision_block, pr_trianglelist, -1);
+    if (dot_product_normalized(xto - xfrom, yto - yfrom, tree.x - xfrom, tree.y - yfrom) > cutoff || point_distance(self.x, self.y, tree.x, tree.y) < 50) {
+        matrix_set(matrix_world, tree.transform);
+        vertex_submit(tree.model, pr_trianglelist, -1);
+        if (draw_debug_shapes && i > 0) {
+            vertex_submit(vb_collision_block, pr_trianglelist, -1);
+        }
     }
 }
 
