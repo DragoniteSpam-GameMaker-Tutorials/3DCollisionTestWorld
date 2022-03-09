@@ -42,8 +42,8 @@ if (draw_debug_shapes) {
 
 var cutoff = dcos(60);
 
-for (var i = 0; i < TREE_COUNT; i++) {
-    var tree = tree_objects[i];
+for (var i = 0,n = array_length(self.tree_objects); i < n; i++) {
+    var tree = self.tree_objects[i];
     if (dot_product_normalized(xto - xfrom, yto - yfrom, tree.x - xfrom, tree.y - yfrom) > cutoff || point_distance(self.x, self.y, tree.x, tree.y) < 50) {
         matrix_set(matrix_world, tree.transform);
         vertex_submit(tree.model, pr_trianglelist, -1);
@@ -51,6 +51,12 @@ for (var i = 0; i < TREE_COUNT; i++) {
             vertex_submit(vb_collision_block, pr_trianglelist, -1);
         }
     }
+}
+
+if (self.ball != undefined) {
+    matrix_set(matrix_world, matrix_build(self.ball.position.x, self.ball.position.y, self.ball.position.z, 0, 0, 0, 0.25, 0.25, 0.25));
+    vertex_submit(self.vb_collision_sphere, pr_trianglelist, -1);
+    matrix_set(matrix_world, matrix_build_identity());
 }
 
 gpu_set_cullmode(cull_noculling);

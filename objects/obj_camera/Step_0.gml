@@ -99,6 +99,13 @@ with (player) {
             distance = min(160, distance + 5);
         }
         #endregion
+        
+        if (mouse_check_button_pressed(mb_left)) {
+            obj_camera.ball = new BallObject(
+                new Vector3(self.x, self.y, self.z),
+                new Vector3(-4 * dcos(self.direction) * dcos(self.pitch), -4 * -dsin(self.direction) * dcos(self.pitch), max(0, 4 * dsin(self.pitch)))
+            );
+        }
     }
     
     if (keyboard_check_pressed(vk_tab)) {
@@ -108,4 +115,8 @@ with (player) {
 
 if (keyboard_check_pressed(ord("Z"))) {
     draw_debug_shapes = !draw_debug_shapes;
+}
+
+if (self.ball) {
+    self.ball.Update();
 }

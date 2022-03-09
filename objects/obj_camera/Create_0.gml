@@ -99,21 +99,16 @@ tree_models = [
 
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
+
 for (var i = 1; i < TREE_COUNT; i++) {
-    tree_objects[i] = new TreeObject(tree_models[irandom(array_length(tree_models) - 1)]);
+    tree = new TreeObject(tree_models[irandom(array_length(tree_models) - 1)]);
+    tree_objects[i] = tree;
 }
+
 #endregion
 
 #region player
-player = {
-    x: 0, y: 0, z: 0,
-    zspeed: 0,
-    direction: 0, pitch: -30, face_direction: 180,
-    distance: 40,
-    mouse_lock: true,
-    frame: 0,
-    shape: new ColSphere(new Vector3(0, 0, 0 + 8), 8),
-};
+player = new PlayerObject();
 
 var data = buffer_load("player.vbuff");
 vb_player = vertex_create_buffer_from_buffer(data, format);
@@ -131,6 +126,7 @@ buffer_delete(data);
 
 draw_debug_shapes = false;
 
+ball = undefined;
 #endregion
 
 window_mouse_set(window_get_width() / 2, window_get_height() / 2);

@@ -6,7 +6,7 @@
     "path": "folders/Demo.yy",
   },
   "resourceVersion": "1.0",
-  "name": "TreeObject",
+  "name": "Objects",
   "tags": [],
   "resourceType": "GMScript",
 }
