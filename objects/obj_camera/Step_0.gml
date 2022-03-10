@@ -43,24 +43,18 @@ with (player) {
         shape.position.z += 0.01;
         
         shape.position.x = (x + dx);
-        for (var i = 0; i < TREE_COUNT; i++) {
-            var tree = obj_camera.tree_objects[i];
-            if (tree.shape.CheckSphere(shape)) {
-                dx = 0;
-                break;
-            }
+        
+        if (obj_camera.collision_world.CheckObject(self.object)) {
+            dx = 0;
         }
         
         x += dx;
         shape.position.x = x;
         
         shape.position.y = (y + dy);
-        for (var i = 0; i < TREE_COUNT; i++) {
-            var tree = obj_camera.tree_objects[i];
-            if (tree.shape.CheckSphere(shape)) {
-                dy = 0;
-                break;
-            }
+        
+        if (obj_camera.collision_world.CheckObject(self.object)) {
+            dy = 0;
         }
         
         y += dy;
@@ -73,12 +67,9 @@ with (player) {
         }
         
         shape.position.z = (z + zspeed + 8);
-        for (var i = 0; i < TREE_COUNT; i++) {
-            var tree = obj_camera.tree_objects[i];
-            if (tree.shape.CheckSphere(shape)) {
-                zspeed = 0;
-                break;
-            }
+        
+        if (obj_camera.collision_world.CheckObject(self.object)) {
+            zspeed = 0;
         }
         
         z += zspeed;

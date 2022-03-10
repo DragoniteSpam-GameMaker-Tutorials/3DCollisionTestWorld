@@ -7,6 +7,8 @@ format = vertex_format_end();
 
 show_debug_overlay(true);
 
+collision_world = new ColWorld(new Vector3(-2000, -2000, -2000), new Vector3(2000, 2000, 2000), 4);
+
 #region floor
 var x1 = -10000;
 var y1 = -10000;
@@ -100,15 +102,19 @@ tree_models = [
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
 
+collision_world.Add(new ColObject(tree_objects[0].shape, tree_objects[0]));
+
 for (var i = 1; i < TREE_COUNT; i++) {
     tree = new TreeObject(tree_models[irandom(array_length(tree_models) - 1)]);
     tree_objects[i] = tree;
+    collision_world.Add(new ColObject(tree.shape, tree));
 }
 
 #endregion
 
 #region player
 player = new PlayerObject();
+player.object = new ColObject(player.shape, player);
 
 var data = buffer_load("player.vbuff");
 vb_player = vertex_create_buffer_from_buffer(data, format);
