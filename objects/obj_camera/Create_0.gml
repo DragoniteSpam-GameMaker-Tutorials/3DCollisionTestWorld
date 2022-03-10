@@ -85,6 +85,19 @@ buffer_delete(data);
 var data = buffer_load("tree_plateau.vbuff");
 vb_tree_plateau = vertex_create_buffer_from_buffer(data, format);
 vertex_freeze(vb_tree_plateau);
+
+vb_tree_plateau_data = [];
+
+for (var i = 0; i < buffer_get_size(data); i += 36 * 3) {
+    array_push(vb_tree_plateau_data,
+        new ColTriangle(
+            new Vector3(buffer_peek(data, i +  0, buffer_f32), buffer_peek(data, i +  4, buffer_f32), buffer_peek(data, i +  8, buffer_f32)),
+            new Vector3(buffer_peek(data, i + 36, buffer_f32), buffer_peek(data, i + 40, buffer_f32), buffer_peek(data, i + 44, buffer_f32)),
+            new Vector3(buffer_peek(data, i + 72, buffer_f32), buffer_peek(data, i + 76, buffer_f32), buffer_peek(data, i + 80, buffer_f32)),
+        )
+    );
+}
+
 buffer_delete(data);
 
 var data = buffer_load("tree_plateau_dark.vbuff");
@@ -109,6 +122,14 @@ for (var i = 1; i < TREE_COUNT; i++) {
     tree_objects[i] = tree;
     collision_world.Add(new ColObject(tree.shape, tree));
 }
+
+tree_mesh = new TreeObject(vb_tree_plateau);
+tree_mesh.x = 0;
+tree_mesh.y = 0;
+tree_mesh.shape = new ColMesh(vb_tree_plateau_data);
+tree_mesh.transform = matrix_build(0, 0, 0, 0, 0, 0, 1, 1, 1);
+array_push(tree_objects, tree_mesh)
+collision_world.Add(new ColObject(tree_mesh.shape, tree_mesh));
 
 #endregion
 
