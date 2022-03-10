@@ -34,10 +34,19 @@ function BallObject(position, direction) constructor {
     self.position = position;
     self.direction = direction;
     
-    self.shape = new ColPoint(self.position);
-    
     static Update = function() {
-        self.position = self.position.Add(self.direction);
-        self.shape = new ColPoint(self.position);
+        var ray = new ColRay(self.position, self.direction);
+        var raycast_result = obj_camera.collision_world.CheckRay(ray);
+        
+        if (raycast_result != undefined) {
+            if (raycast_result.distance < self.direction.Magnitude()) {
+                self.position = raycast_result.point;
+                self.direction = new Vector3(0, 0, 0);
+            } else {
+                self.position = self.position.Add(self.direction);
+            }
+        } else {
+            self.position = self.position.Add(self.direction);
+        }
     };
 }
