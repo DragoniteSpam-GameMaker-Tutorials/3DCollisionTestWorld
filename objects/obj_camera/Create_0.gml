@@ -1,3 +1,7 @@
+#macro COLLISION_GROUP_PLAYER           0x01
+#macro COLLISION_GROUP_BALL             0x02
+#macro COLLISION_GROUP_GHOST            0x04
+
 vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_normal();
@@ -110,17 +114,17 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 1000
+#macro TREE_COUNT 3000
 
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
 
-collision_world.Add(new ColObject(tree_objects[0].shape, tree_objects[0]));
+collision_world.Add(new ColObject(tree_objects[0].shape, tree_objects[0], COLLISION_GROUP_PLAYER | COLLISION_GROUP_BALL | COLLISION_GROUP_GHOST));
 
 for (var i = 1; i < TREE_COUNT; i++) {
     tree = new TreeObject(tree_models[irandom(array_length(tree_models) - 1)]);
     tree_objects[i] = tree;
-    collision_world.Add(new ColObject(tree.shape, tree));
+    collision_world.Add(new ColObject(tree.shape, tree, COLLISION_GROUP_PLAYER | COLLISION_GROUP_BALL));
 }
 
 tree_mesh = new TreeObject(vb_tree_plateau);
@@ -129,13 +133,13 @@ tree_mesh.y = 0;
 tree_mesh.shape = new ColMesh(vb_tree_plateau_data);
 tree_mesh.transform = matrix_build(0, 0, 0, 0, 0, 0, 1, 1, 1);
 array_push(tree_objects, tree_mesh)
-collision_world.Add(new ColObject(tree_mesh.shape, tree_mesh));
+collision_world.Add(new ColObject(tree_mesh.shape, tree_mesh, COLLISION_GROUP_BALL));
 
 #endregion
 
 #region player
 player = new PlayerObject();
-player.object = new ColObject(player.shape, player);
+player.object = new ColObject(player.shape, player, COLLISION_GROUP_PLAYER | COLLISION_GROUP_BALL, COLLISION_GROUP_PLAYER);
 
 var data = buffer_load("player.vbuff");
 vb_player = vertex_create_buffer_from_buffer(data, format);

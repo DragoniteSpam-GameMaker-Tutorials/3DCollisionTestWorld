@@ -28,6 +28,7 @@ function PlayerObject() constructor {
     self.mouse_lock = true;
     self.frame = 0;
     self.shape = new ColSphere(new Vector3(self.x, self.y, 0 + 8), 8);
+    self.is_ghost = false;
 };
 
 function BallObject(position, direction) constructor {
@@ -36,7 +37,7 @@ function BallObject(position, direction) constructor {
     
     static Update = function() {
         var ray = new ColRay(self.position, self.direction);
-        var raycast_result = obj_camera.collision_world.CheckRay(ray);
+        var raycast_result = obj_camera.collision_world.CheckRay(ray, COLLISION_GROUP_BALL);
         
         if (raycast_result != undefined) {
             if (raycast_result.distance < self.direction.Magnitude()) {

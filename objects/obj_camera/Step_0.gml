@@ -102,6 +102,15 @@ with (player) {
     if (keyboard_check_pressed(vk_tab)) {
         mouse_lock = !mouse_lock;
     }
+    
+    if (keyboard_check_pressed(vk_enter)) {
+        self.is_ghost = !self.is_ghost;
+        if (self.is_ghost) {
+            self.object.group = COLLISION_GROUP_GHOST;
+        } else {
+            self.object.group = COLLISION_GROUP_PLAYER;
+        }
+    }
 }
 
 if (keyboard_check_pressed(ord("Z"))) {

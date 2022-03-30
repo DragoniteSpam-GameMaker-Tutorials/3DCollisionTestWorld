@@ -1,0 +1,1 @@
+draw_text(32, 64, "Is ghost: " + string(self.player.is_ghost));
