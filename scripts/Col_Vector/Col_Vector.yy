@@ -1,12 +1,11 @@
 {
-  "isDnD": false,
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "Col_Vector",
   "isCompatibility": false,
+  "isDnD": false,
   "parent": {
     "name": "Collision Stuff",
     "path": "folders/Collision Stuff.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "Col_Vector",
-  "tags": [],
-  "resourceType": "GMScript",
 }

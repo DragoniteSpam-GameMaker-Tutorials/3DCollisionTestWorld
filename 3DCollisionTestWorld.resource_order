@@ -1,0 +1,17 @@
+{
+  "FolderOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"duck_right","order":3,"path":"sprites/duck_right/duck_right.yy",},
+    {"name":"duck_front","order":1,"path":"sprites/duck_front/duck_front.yy",},
+    {"name":"Col_Shapes","order":3,"path":"scripts/Col_Shapes/Col_Shapes.yy",},
+    {"name":"Col_World","order":5,"path":"scripts/Col_World/Col_World.yy",},
+    {"name":"duck_left","order":2,"path":"sprites/duck_left/duck_left.yy",},
+    {"name":"Col_SAT_Stuff","order":2,"path":"scripts/Col_SAT_Stuff/Col_SAT_Stuff.yy",},
+    {"name":"Objects","order":7,"path":"scripts/Objects/Objects.yy",},
+    {"name":"Col_Vector","order":4,"path":"scripts/Col_Vector/Col_Vector.yy",},
+    {"name":"obj_camera","order":4,"path":"objects/obj_camera/obj_camera.yy",},
+    {"name":"Col_Octree","order":1,"path":"scripts/Col_Octree/Col_Octree.yy",},
+    {"name":"shd_demo","order":6,"path":"shaders/shd_demo/shd_demo.yy",},
+    {"name":"Room1","order":5,"path":"rooms/Room1/Room1.yy",},
+  ],
+}

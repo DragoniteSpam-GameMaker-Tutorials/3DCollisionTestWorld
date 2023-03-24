@@ -1,11 +1,10 @@
 {
-  "type": 1,
+  "resourceType": "GMShader",
+  "resourceVersion": "1.0",
+  "name": "shd_demo",
   "parent": {
     "name": "Demo",
     "path": "folders/Demo.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "shd_demo",
-  "tags": [],
-  "resourceType": "GMShader",
+  "type": 1,
 }
