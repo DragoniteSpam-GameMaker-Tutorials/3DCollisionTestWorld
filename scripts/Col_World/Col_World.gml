@@ -14,11 +14,19 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
         if ((self.mask & group) == 0) return false;
         return self.shape.CheckRay(ray, hit_info);
     };
+    
+    static GetMin = function() {
+        return self.shape.GetMin();
+    };
+    
+    static GetMax = function() {
+        return self.shape.GetMax();
+    };
 }
 
 function ColWorld(bounds_min, bounds_max, max_depth) constructor {
     self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
-    self.accelerator = new ColWorldQuadtree(self.bounds, max_depth);
+    self.accelerator = new ColWorldOctree(self.bounds, max_depth);
     self.depth = max_depth;
     
     static Add = function(object) {
@@ -100,15 +108,11 @@ function ColWorldOctree(bounds, depth) constructor {
     };
     
     static Remove = function(object) {
-        for (var i = 0; i < array_length(self.contents); i++) {
-            if (self.contents[i] == object) {
-                array_delete(self.contents, i, 1);
-                if (self.depth > 0) {
-                    for (var j = 0; j < array_length(self.children); j++) {
-                        self.children[j].Remove(object);
-                    }
-                }
-                return;
+        var index = array_get_index(self.contents, object);
+        if (index != -1) {
+            array_delete(self.contents, index, 1);
+            for (var j = 0; j < array_length(self.children); j++) {
+                self.children[j].Remove(object);
             }
         }
     };
@@ -202,15 +206,11 @@ function ColWorldQuadtree(bounds, depth) constructor {
     };
     
     static Remove = function(object) {
-        for (var i = 0; i < array_length(self.contents); i++) {
-            if (self.contents[i] == object) {
-                array_delete(self.contents, i, 1);
-                if (self.depth > 0) {
-                    for (var j = 0; j < array_length(self.children); j++) {
-                        self.children[j].Remove(object);
-                    }
-                }
-                return;
+        var index = array_get_index(self.contents, object);
+        if (index != -1) {
+            array_delete(self.contents, index, 1);
+            for (var j = 0; j < array_length(self.children); j++) {
+                self.children[j].Remove(object);
             }
         }
     };

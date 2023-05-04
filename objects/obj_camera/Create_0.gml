@@ -11,7 +11,8 @@ format = vertex_format_end();
 
 show_debug_overlay(true);
 
-collision_world = new ColWorld(new Vector3(-2000, -2000, -2000), new Vector3(2000, 2000, 2000), 4);
+//collision_world = new ColWorld(new Vector3(-2000, -2000, -2000), new Vector3(2000, 2000, 2000), 4);
+collision_world = new ColWorldSpatialHash(100);
 
 #region floor
 var x1 = -10000;
