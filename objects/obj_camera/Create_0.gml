@@ -3,6 +3,7 @@
 #macro COLLISION_GROUP_GHOST            0x04
 
 self.preview_surface = -1;
+self.things_drawn = 0;
 
 vertex_format_begin();
 vertex_format_add_position_3d();

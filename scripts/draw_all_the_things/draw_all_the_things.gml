@@ -28,7 +28,8 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     }
 
     var cutoff = dcos(60);
-
+    self.things_drawn = 0;
+    
     for (var i = 0,n = array_length(self.tree_objects); i < n; i++) {
         var tree = self.tree_objects[i];
         matrix_set(matrix_world, tree.transform);
@@ -36,6 +37,7 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
         if (draw_debug_shapes && i > 0) {
             vertex_submit(vb_collision_block, pr_trianglelist, -1);
         }
+        self.things_drawn++;
     }
 
     if (self.ball != undefined) {
