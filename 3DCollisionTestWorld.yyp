@@ -11,9 +11,9 @@
   },
   "defaultScriptType": 1,
   "Folders": [
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demo","folderPath":"folders/Demo.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Collision Stuff","folderPath":"folders/Collision Stuff.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Shapes","folderPath":"folders/Collision Stuff/Shapes.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demo","folderPath":"folders/Demo.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"collision_block.vbuff","CopyToMask":-1,"filePath":"datafiles",},
@@ -43,6 +43,7 @@
     {"id":{"name":"Col_Matrix","path":"scripts/Col_Matrix/Col_Matrix.yy",},},
     {"id":{"name":"Col_Spatial_Hash","path":"scripts/Col_Spatial_Hash/Col_Spatial_Hash.yy",},},
     {"id":{"name":"Col_Shape_Sphere","path":"scripts/Col_Shape_Sphere/Col_Shape_Sphere.yy",},},
+    {"id":{"name":"draw_all_the_things","path":"scripts/draw_all_the_things/draw_all_the_things.yy",},},
     {"id":{"name":"duck_front","path":"sprites/duck_front/duck_front.yy",},},
     {"id":{"name":"Col_Helper_Functions","path":"scripts/Col_Helper_Functions/Col_Helper_Functions.yy",},},
     {"id":{"name":"Col_Shape_Plane","path":"scripts/Col_Shape_Plane/Col_Shape_Plane.yy",},},

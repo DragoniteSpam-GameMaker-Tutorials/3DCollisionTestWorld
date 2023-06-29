@@ -13,6 +13,7 @@
     {"name":"Col_Matrix","order":4,"path":"scripts/Col_Matrix/Col_Matrix.yy",},
     {"name":"Col_Spatial_Hash","order":7,"path":"scripts/Col_Spatial_Hash/Col_Spatial_Hash.yy",},
     {"name":"Col_Shape_Sphere","order":8,"path":"scripts/Col_Shape_Sphere/Col_Shape_Sphere.yy",},
+    {"name":"draw_all_the_things","order":8,"path":"scripts/draw_all_the_things/draw_all_the_things.yy",},
     {"name":"duck_front","order":1,"path":"sprites/duck_front/duck_front.yy",},
     {"name":"Col_Helper_Functions","order":3,"path":"scripts/Col_Helper_Functions/Col_Helper_Functions.yy",},
     {"name":"Col_Shape_Plane","order":5,"path":"scripts/Col_Shape_Plane/Col_Shape_Plane.yy",},

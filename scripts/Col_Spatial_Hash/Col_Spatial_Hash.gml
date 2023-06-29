@@ -264,10 +264,10 @@ function ColSpatialHashNode(bounds) constructor {
     
     static DebugDraw = function() {
         self.bounds.DebugDraw();
-        array_foreach(self.objects, function(object) {
+        /*array_foreach(self.objects, function(object) {
             if (object.shape[$ "DebugDraw"])
                 object.shape.DebugDraw();
-        });
+        });*/
     };
     
     static Add = function(object) {
