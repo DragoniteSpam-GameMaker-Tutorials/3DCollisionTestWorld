@@ -51,4 +51,7 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     gpu_set_ztestenable(false);
     shader_reset();
     matrix_set(matrix_world, matrix_build_identity());
+    
+    var frustum = new ColCameraFrustum(new Matrix4(cull_view_mat), new Matrix4(cull_proj_mat));
+    frustum.DebugDraw();
 }

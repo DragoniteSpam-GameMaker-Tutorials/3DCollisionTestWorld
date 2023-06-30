@@ -6,7 +6,7 @@ var yfrom = yto - player.distance * dsin(player.direction) * dcos(player.pitch);
 var zfrom = zto - player.distance * dsin(player.pitch);
 
 view_mat = matrix_build_lookat(xfrom, yfrom, zfrom, xto, yto, zto, 0, 0, 1);
-proj_mat = matrix_build_projection_perspective_fov(-60, -16 / 9, 1, 1000);
+proj_mat = matrix_build_projection_perspective_fov(-60, -16 / 9, 1, 250);
 
 var cam = camera_get_active();
 camera_set_view_mat(cam, view_mat);
