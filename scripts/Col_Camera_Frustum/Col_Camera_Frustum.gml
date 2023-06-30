@@ -13,4 +13,29 @@ function ColCameraFrustum(view_mat, proj_mat) constructor {
     self.top =          new ColPlane(c4.Sub(c2), vp.w.w - vp.y.w).Normalize();
     self.near =         new ColPlane(c4.Add(c3), vp.w.w + vp.z.w).Normalize();
     self.far =          new ColPlane(c4.Sub(c3), vp.w.w - vp.z.w).Normalize();
+    
+    static GetCorners = function() {
+        return [
+            col_three_plane_intersection(self.near,   self.top,       self.left),
+            col_three_plane_intersection(self.near,   self.top,       self.right),
+            col_three_plane_intersection(self.near,   self.bottom,    self.left),
+            col_three_plane_intersection(self.near,   self.bottom,    self.right),
+            col_three_plane_intersection(self.far,    self.top,       self.left),
+            col_three_plane_intersection(self.far,    self.top,       self.right),
+            col_three_plane_intersection(self.far,    self.bottom,    self.left),
+            col_three_plane_intersection(self.far,    self.bottom,    self.right)
+        ];
+    };
+}
+
+function col_three_plane_intersection(p1, p2, p3) {
+    var p2xp3 = p2.normal.Cross(p3.normal);
+    var p3xp1 = p3.normal.Cross(p1.normal);
+    var p1xp2 = p1.normal.Cross(p2.normal);
+    
+    var cross_product_sum = p2xp3.Mul(-p1.distance)
+        .Add(p3xp1.Mul(-p2.distance))
+        .Add(p1xp2.Mul(-p3.distance));
+    
+    return cross_product_sum.Div(p1.normal.Dot(p2xp3));
 }
