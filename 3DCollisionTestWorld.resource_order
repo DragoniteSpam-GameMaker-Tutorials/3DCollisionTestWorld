@@ -8,6 +8,7 @@
     {"name":"Col_Shape_Point","order":6,"path":"scripts/Col_Shape_Point/Col_Shape_Point.yy",},
     {"name":"Col_SAT_Stuff","order":6,"path":"scripts/Col_SAT_Stuff/Col_SAT_Stuff.yy",},
     {"name":"duck_right","order":3,"path":"sprites/duck_right/duck_right.yy",},
+    {"name":"Col_Camera_Frustum","order":10,"path":"scripts/Col_Camera_Frustum/Col_Camera_Frustum.yy",},
     {"name":"Col_Shape_Capsule","order":1,"path":"scripts/Col_Shape_Capsule/Col_Shape_Capsule.yy",},
     {"name":"Col_Shape_Ray","order":7,"path":"scripts/Col_Shape_Ray/Col_Shape_Ray.yy",},
     {"name":"Col_Matrix","order":4,"path":"scripts/Col_Matrix/Col_Matrix.yy",},

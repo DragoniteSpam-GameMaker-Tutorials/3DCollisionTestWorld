@@ -38,6 +38,7 @@
     {"id":{"name":"Col_Shape_Point","path":"scripts/Col_Shape_Point/Col_Shape_Point.yy",},},
     {"id":{"name":"Col_SAT_Stuff","path":"scripts/Col_SAT_Stuff/Col_SAT_Stuff.yy",},},
     {"id":{"name":"duck_right","path":"sprites/duck_right/duck_right.yy",},},
+    {"id":{"name":"Col_Camera_Frustum","path":"scripts/Col_Camera_Frustum/Col_Camera_Frustum.yy",},},
     {"id":{"name":"Col_Shape_Capsule","path":"scripts/Col_Shape_Capsule/Col_Shape_Capsule.yy",},},
     {"id":{"name":"Col_Shape_Ray","path":"scripts/Col_Shape_Ray/Col_Shape_Ray.yy",},},
     {"id":{"name":"Col_Matrix","path":"scripts/Col_Matrix/Col_Matrix.yy",},},
