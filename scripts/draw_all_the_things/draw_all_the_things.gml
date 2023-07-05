@@ -1,4 +1,6 @@
 function draw_all_the_things(cull_view_mat, cull_proj_mat) {
+    var frustum = new ColCameraFrustum(new Matrix4(cull_view_mat), new Matrix4(cull_proj_mat));
+    
     gpu_set_cullmode(cull_counterclockwise);
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);
@@ -30,8 +32,11 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     var cutoff = dcos(60);
     self.things_drawn = 0;
     
-    for (var i = 0,n = array_length(self.tree_objects); i < n; i++) {
-        var tree = self.tree_objects[i];
+    var objects = self.collision_world.GetObjectsInFrustum(frustum);
+    
+    //for (var i = 0,n = array_length(self.tree_objects); i < n; i++) {
+    for (var i = 0, n = array_length(objects); i < n; i++) {
+        var tree = objects[i].reference;
         matrix_set(matrix_world, tree.transform);
         vertex_submit(tree.model, pr_trianglelist, -1);
         if (draw_debug_shapes && i > 0) {
@@ -45,13 +50,13 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
         vertex_submit(self.vb_collision_sphere, pr_trianglelist, -1);
         matrix_set(matrix_world, matrix_build_identity());
     }
-
+    
     gpu_set_cullmode(cull_noculling);
-    gpu_set_zwriteenable(false);
-    gpu_set_ztestenable(false);
     shader_reset();
     matrix_set(matrix_world, matrix_build_identity());
     
-    var frustum = new ColCameraFrustum(new Matrix4(cull_view_mat), new Matrix4(cull_proj_mat));
     frustum.DebugDraw();
+    
+    gpu_set_zwriteenable(false);
+    gpu_set_ztestenable(false);
 }
