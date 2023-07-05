@@ -268,4 +268,21 @@ function ColAABB(position, half_extents) constructor {
             new ColLine(vertices[3], vertices[7]),
         ];
     };
+    
+    static CheckFrustum = function(frustum) {
+        var planes = frustum.GetPlanes();
+        var is_intersecting_anything = false;
+        for (var i = 0, n = array_length(planes); i < n; i++) {
+            var r = self.half_extents.Magnitude();
+            
+            var dist = planes[i].normal.Dot(self.position) + planes[i].distance;
+            
+            if (dist < -r)
+                return EFrustumResults.OUTSIDE;
+            
+            if (abs(dist) < r)
+                is_intersecting_anything = true;
+        }
+        return is_intersecting_anything ? EFrustumResults.INTERSECTING : EFrustumResults.INSIDE;
+    };
 }
