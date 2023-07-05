@@ -270,7 +270,7 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static CheckFrustum = function(frustum) {
-        var planes = frustum.GetPlanes();
+        var planes = frustum.AsArray();
         var is_intersecting_anything = false;
         for (var i = 0, n = array_length(planes); i < n; i++) {
             var r = self.half_extents.Magnitude();
