@@ -14,6 +14,10 @@ function ColCameraFrustum(view_mat, proj_mat) constructor {
     self.near =         new ColPlane(c4.Add(c3), vp.w.w + vp.z.w).Normalize();
     self.far =          new ColPlane(c4.Sub(c3), vp.w.w - vp.z.w).Normalize();
     
+    static AsArray = function() {
+        return [self.left, self.right, self.bottom, self.top, self.near, self.far];
+    };
+    
     static GetCorners = function() {
         return [
             col_three_plane_intersection(self.near,   self.top,       self.left),
@@ -97,4 +101,10 @@ function col_three_plane_intersection(p1, p2, p3) {
         .Add(p1xp2.Mul(-p3.distance));
     
     return cross_product_sum.Div(p1.normal.Dot(p2xp3));
+}
+
+enum EFrustumResults {
+    OUTSIDE,
+    INTERSECTING,
+    INSIDE
 }
