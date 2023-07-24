@@ -31,23 +31,25 @@ function PlayerObject() constructor {
     self.is_ghost = false;
 };
 
-function BallObject(position, direction) constructor {
+function BallObject(position, velocity) constructor {
     self.position = position;
-    self.direction = direction;
+    self.velocity = velocity;
     
     static Update = function() {
-        var ray = new ColRay(self.position, self.direction);
+        var ray = new ColRay(self.position, self.velocity);
         var raycast_result = obj_camera.collision_world.CheckRay(ray, COLLISION_GROUP_BALL);
         
         if (raycast_result != undefined) {
-            if (raycast_result.distance < self.direction.Magnitude()) {
-                self.position = raycast_result.point;
-                self.direction = new Vector3(0, 0, 0);
+            if (raycast_result.distance < self.velocity.Magnitude()) {
+                var dist = self.position.DistanceTo(raycast_result.point);
+                var dist_to_go = self.velocity.Magnitude() - dist;
+                self.velocity = self.velocity.Sub(raycast_result.normal.Mul(2 * self.velocity.Dot(raycast_result.normal)));
+                self.position = raycast_result.point.Add(self.velocity.Normalize().Mul(max(dist_to_go, 0.01)));
             } else {
-                self.position = self.position.Add(self.direction);
+                self.position = self.position.Add(self.velocity);
             }
         } else {
-            self.position = self.position.Add(self.direction);
+            self.position = self.position.Add(self.velocity);
         }
     };
 }
