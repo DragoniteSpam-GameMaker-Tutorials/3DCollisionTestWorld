@@ -29,7 +29,7 @@ function ColOBB(position, size, orientation) constructor {
     static CheckSphere = function(sphere) {
         var nearest = self.NearestPoint(sphere.position);
         var dist = nearest.DistanceTo(sphere.position);
-        return dist <= sphere.radius;
+        return dist < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
@@ -215,6 +215,29 @@ function ColOBB(position, size, orientation) constructor {
             return (hit_info.distance <= line.Length());
         }
         return false;
+    };
+    
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var nearest = self.NearestPoint(sphere.position);
+        
+        if (nearest.DistanceTo(sphere.position) == 0) {
+            return undefined;
+            /*
+            var dir_to_center = sphere.position.Sub(self.position).Normalize();
+            var new_point = dir_to_center.Mul(self.half_extents.Magnitude());
+            
+            nearest = self.NearestPoint(new_point);
+            var dir = nearest.Sub(sphere.position).Normalize();
+            */
+        } else {
+            var dir = sphere.position.Sub(nearest).Normalize();
+        }
+        
+        return nearest.Add(dir.Mul(sphere.radius));
     };
     
     static NearestPoint = function(vec3) {

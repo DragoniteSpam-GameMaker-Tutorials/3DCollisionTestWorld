@@ -10,7 +10,7 @@ function ColPoint(position) constructor {
     };
     
     static CheckSphere = function(sphere) {
-        return self.position.DistanceTo(sphere.position) <= sphere.radius;
+        return self.position.DistanceTo(sphere.position) < sphere.radius;
     };
     
     static CheckAABB = function(aabb) {
@@ -74,6 +74,17 @@ function ColPoint(position) constructor {
     static CheckLine = function(line) {
         var nearest = line.NearestPoint(self.position);
          return (nearest.DistanceTo(self.position) == 0);
+    };
+    
+    static DisplaceSphere = function(sphere) {
+        if (!self.CheckSphere(sphere)) return undefined;
+        
+        if (self.position.DistanceTo(sphere.position) == 0) return undefined;
+        
+        var dir = sphere.position.Sub(self.position).Normalize();
+        var offset = dir.Mul(sphere.radius);
+        
+        return self.position.Add(offset);
     };
     
     static GetMin = function() {

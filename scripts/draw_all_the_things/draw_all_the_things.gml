@@ -38,10 +38,10 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     for (var i = 0, n = array_length(objects); i < n; i++) {
         var tree = objects[i].reference;
         matrix_set(matrix_world, tree.transform);
-        vertex_submit(tree.model, pr_trianglelist, -1);
-        if (draw_debug_shapes && i > 0) {
+        //vertex_submit(tree.model, pr_trianglelist, -1);
+        //if (draw_debug_shapes && i > 0) {
             vertex_submit(vb_collision_block, pr_trianglelist, -1);
-        }
+        //}
         self.things_drawn++;
     }
 

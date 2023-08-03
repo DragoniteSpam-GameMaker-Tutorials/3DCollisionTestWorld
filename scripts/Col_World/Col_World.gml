@@ -15,6 +15,10 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
         return self.shape.CheckRay(ray, hit_info);
     };
     
+    static DisplaceSphere = function(sphere) {
+        return self.shape.DisplaceSphere(sphere);
+    };
+    
     static GetMin = function() {
         return self.shape.GetMin();
     };
@@ -54,6 +58,27 @@ function ColWorld(bounds_min, bounds_max, max_depth) constructor {
         }
         
         return undefined;
+    };
+    
+    static DisplaceSphere = function(sphere_object, attempts = 5) {
+        var current_position = sphere_object.shape.position;
+        
+        repeat (attempts) {
+            var collided_with = self.CheckObject(sphere_object);
+            if (collided_with == undefined) break;
+            
+            var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
+            if (displaced_position == undefined) break;
+            
+            sphere_object.shape.position = displaced_position;
+        }
+        
+        var displaced_position = sphere_object.shape.position;
+        sphere_object.shape.position = current_position;
+        
+        if (current_position == displaced_position) return undefined;
+        
+        return displaced_position;
     };
     
     static GetObjectsInFrustum = function(frustum) {
@@ -130,18 +155,17 @@ function ColWorldOctree(bounds, depth) constructor {
         if (self.children == undefined) {
             for (var i = 0; i < array_length(self.contents); i++) {
                 if (self.contents[i].CheckObject(object)) {
-                    return true;
+                    return self.contents[i];
                 }
             }
         } else {
             for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckObject(object)) {
-                    return true;
-                }
+                var recursive_result = self.children[i].CheckObject(object);
+                if (recursive_result != undefined) return recursive_result;
             }
         }
         
-        return false;
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
@@ -247,18 +271,17 @@ function ColWorldQuadtree(bounds, depth) constructor {
         if (self.children == undefined) {
             for (var i = 0; i < array_length(self.contents); i++) {
                 if (self.contents[i].CheckObject(object)) {
-                    return true;
+                    return self.contents[i];
                 }
             }
         } else {
             for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckObject(object)) {
-                    return true;
-                }
+                var recursive_result = self.children[i].CheckObject(object);
+                if (recursive_result != undefined) return recursive_result;
             }
         }
         
-        return false;
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {

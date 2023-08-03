@@ -118,7 +118,7 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 3000
+#macro TREE_COUNT 400
 
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);

@@ -4,8 +4,9 @@ function TreeObject(model) constructor {
     self.x = dist * cos(angle);
     self.y = -dist * sin(angle);
     self.model = model;
-    self.shape = new ColAABB(new Vector3(self.x, self.y, 16), new Vector3(8, 8, 16));
-    self.transform = matrix_build(self.x, self.y, 0, 0, 0, 0, 1, 1, 1);
+    //self.shape = new ColAABB(new Vector3(self.x, self.y, 16), new Vector3(8, 8, 16));
+    self.transform = matrix_build(self.x, self.y, 0, 0, 0, random(360), 1, 1, 1);
+    self.shape = new ColOBB(new Vector3(self.x, self.y, 16), new Vector3(8, 8, 16), new Matrix4(self.transform).GetOrientationMatrix());
 }
 
 function FloorObject(model) constructor {

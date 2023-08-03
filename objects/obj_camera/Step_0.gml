@@ -40,41 +40,30 @@ with (player) {
             dy -= dsin(direction) * move_speed;
         }
         
-        shape.position.z += 0.01;
-        
-        shape.position.x = (x + dx);
-        
-        if (obj_camera.collision_world.CheckObject(self.object)) {
-            dx = 0;
-        }
-        
-        x += dx;
-        shape.position.x = x;
-        
-        shape.position.y = (y + dy);
-        
-        if (obj_camera.collision_world.CheckObject(self.object)) {
-            dy = 0;
-        }
-        
-        y += dy;
-        shape.position.y = y;
-        
-        shape.position.z -= 0.01;
-        
         if (keyboard_check_pressed(vk_space)) {
             zspeed = 2;
         }
         
-        shape.position.z = (z + zspeed + 8);
+        zspeed -= 0.075;
+        
+        shape.position = shape.position.Add(new Vector3(dx, dy, zspeed));
+        
+        var displaced_location = obj_camera.collision_world.DisplaceSphere(self.object);
+        if (displaced_location != undefined) {
+            shape.position = displaced_location;
+        }
+        
+        self.x = self.shape.position.x;
+        self.y = self.shape.position.y;
+        self.z = self.shape.position.z - 8;
+        
+        shape.position.z -= 0.01;
         
         if (obj_camera.collision_world.CheckObject(self.object)) {
             zspeed = 0;
         }
         
-        z += zspeed;
-        shape.position.z = (z + zspeed + 8);
-        zspeed -= 0.075;
+        shape.position.z += 0.01;
         
         if (point_distance(xlast, ylast, x, y) > 0.01) {
             frame = (frame + 0.075) % 3;

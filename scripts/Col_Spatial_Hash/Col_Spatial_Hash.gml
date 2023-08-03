@@ -15,7 +15,7 @@ function ColWorldSpatialHash(chunk_size) constructor {
     };
     
     static HashFunction = function(x, y, z) {
-        return $"{x}{y}{z}";
+        return $"{x},{y},{z}";
     };
     
     static GetBoundingChunk = function(object) {
@@ -158,14 +158,14 @@ function ColWorldSpatialHash(chunk_size) constructor {
                     var chunk = self.GetChunk(i, j, k);
                     
                     if (chunk != undefined) {
-                        if (chunk.CheckObject(object))
-                            return true;
+                        var result = chunk.CheckObject(object);
+                        if (result != undefined) return result;
                     }
                 }
             }
         }
         
-        return false;
+        return undefined;
     };
     
     // https://github.com/prime31/Nez/blob/master/Nez.Portable/Physics/SpatialHash.cs
@@ -256,6 +256,27 @@ function ColWorldSpatialHash(chunk_size) constructor {
         
         return hit_info;
     };
+    
+    static DisplaceSphere = function(sphere_object, attempts = 5) {
+        var current_position = sphere_object.shape.position;
+        
+        repeat (attempts) {
+            var collided_with = self.CheckObject(sphere_object);
+            if (collided_with == undefined) break;
+            
+            var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
+            if (displaced_position == undefined) break;
+            
+            sphere_object.shape.position = displaced_position;
+        }
+        
+        var displaced_position = sphere_object.shape.position;
+        sphere_object.shape.position = current_position;
+        
+        if (current_position == displaced_position) return undefined;
+        
+        return displaced_position;
+    };
 }
 
 function ColSpatialHashNode(bounds) constructor {
@@ -286,9 +307,9 @@ function ColSpatialHashNode(bounds) constructor {
     static CheckObject = function(object) {
         for (var i = 0; i < array_length(self.objects); i++) {
             if (self.objects[i].CheckObject(object))
-                return true;
+                return self.objects[i];
         }
-        return false;
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
