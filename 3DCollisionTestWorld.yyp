@@ -11,9 +11,9 @@
   },
   "defaultScriptType": 1,
   "Folders": [
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demo","folderPath":"folders/Demo.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Collision Stuff","folderPath":"folders/Collision Stuff.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Shapes","folderPath":"folders/Collision Stuff/Shapes.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Demo","folderPath":"folders/Demo.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"collision_block.vbuff","CopyToMask":-1,"filePath":"datafiles",},

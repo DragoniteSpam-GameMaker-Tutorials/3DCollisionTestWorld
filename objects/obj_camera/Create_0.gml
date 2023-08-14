@@ -119,10 +119,9 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 3000
+#macro TREE_COUNT 2000
 
 var t0 = get_timer();
-
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
 
@@ -168,6 +167,7 @@ ball = undefined;
 #endregion
 
 var t1 = get_timer();
-show_debug_message($"adding all the things took {(t1 - t0) / 1000} ms");
+setup_time = (t1 - t0) / 1000;
+show_debug_message($"adding all the things took {setup_time} ms");
 
 window_mouse_set_locked(true);
