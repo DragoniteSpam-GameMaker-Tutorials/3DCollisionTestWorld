@@ -73,6 +73,7 @@ tree_models = [
 ];
 
 #macro TREE_COUNT 4000
+#macro web:TREE_COUNT 1000
 
 var t0 = get_timer();
 tree_objects = array_create(TREE_COUNT);

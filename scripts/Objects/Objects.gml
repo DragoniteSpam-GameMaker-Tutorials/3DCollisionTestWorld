@@ -1,5 +1,7 @@
 function TreeObject(model) constructor {
-    var dist = random(2500) + 100;
+    #macro TREE_RANGE 2500
+    #macro web:TREE_RANGE 1500
+    var dist = random(TREE_RANGE) + 100;
     var angle = random(2 * pi);
     self.x = dist * cos(angle);
     self.y = -dist * sin(angle);

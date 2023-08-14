@@ -16,7 +16,7 @@ camera_apply(cam);
 draw_all_the_things(view_mat, proj_mat);
 
 if (!surface_exists(self.preview_surface)) {
-    self.preview_surface = surface_create(480, 320);
+    self.preview_surface = surface_create(360, 240);
 }
 
 if (draw_frustum_view) {
@@ -24,7 +24,7 @@ if (draw_frustum_view) {
     draw_clear(c_black);
     var d = 1600;
     camera_set_view_mat(cam, matrix_build_lookat(d * dcos(current_time / 100), -d * dsin(current_time / 100), 500, 0, 0, 0, 0, 0, 1));
-    camera_set_proj_mat(cam, matrix_build_projection_perspective_fov(-60, -480 / 320, 1, 10000));
+    camera_set_proj_mat(cam, matrix_build_projection_perspective_fov(-60, -360 / 240, 1, 10000));
     camera_apply(cam);
     draw_all_the_things(view_mat, proj_mat);
     surface_reset_target();

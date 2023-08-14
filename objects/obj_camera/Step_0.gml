@@ -78,7 +78,7 @@ with (player) {
         }
         #endregion
         
-        if (mouse_check_button_pressed(mb_left)) {
+        if (keyboard_check_pressed(ord("T"))) {
             obj_camera.ball = new BallObject(
                 new Vector3(self.x, self.y, self.z),
                 new Vector3(-4 * dcos(self.direction) * dcos(self.pitch), -4 * -dsin(self.direction) * dcos(self.pitch), max(0, 4 * dsin(self.pitch)))
@@ -88,15 +88,6 @@ with (player) {
     
     if (keyboard_check_pressed(vk_tab)) {
         window_mouse_set_locked(!window_mouse_get_locked());
-    }
-    
-    if (keyboard_check_pressed(vk_enter)) {
-        self.is_ghost = !self.is_ghost;
-        if (self.is_ghost) {
-            self.object.group = COLLISION_GROUP_GHOST;
-        } else {
-            self.object.group = COLLISION_GROUP_PLAYER;
-        }
     }
 }
 
