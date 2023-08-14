@@ -100,8 +100,12 @@ with (player) {
     }
 }
 
-if (keyboard_check_pressed(ord("Z"))) {
+if (keyboard_check_pressed(ord("C"))) {
     draw_debug_shapes = !draw_debug_shapes;
+}
+
+if (keyboard_check_pressed(ord("F"))) {
+    draw_frustum_view = !draw_frustum_view;
 }
 
 if (self.ball) {

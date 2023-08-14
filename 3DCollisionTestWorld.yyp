@@ -34,6 +34,7 @@
     "IDEVersion": "2023.800.0.396",
   },
   "resources": [
+    {"id":{"name":"fnt_demo","path":"fonts/fnt_demo/fnt_demo.yy",},},
     {"id":{"name":"Col_Spatial_Hash","path":"scripts/Col_Spatial_Hash/Col_Spatial_Hash.yy",},},
     {"id":{"name":"Col_Shape_Plane","path":"scripts/Col_Shape_Plane/Col_Shape_Plane.yy",},},
     {"id":{"name":"Col_Shape_Triangle","path":"scripts/Col_Shape_Triangle/Col_Shape_Triangle.yy",},},

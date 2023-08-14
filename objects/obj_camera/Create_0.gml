@@ -107,6 +107,7 @@ vb_collision_sphere = load("collision_sphere.vbuff", format);
 vb_collision_block = load("collision_block.vbuff", format);
 
 draw_debug_shapes = false;
+draw_frustum_view = true;
 #endregion
 
 ball = undefined;
@@ -116,3 +117,10 @@ setup_time = (t1 - t0) / 1000;
 show_debug_message($"adding all the things took {setup_time} ms");
 
 window_mouse_set_locked(true);
+
+font_enable_effects(fnt_demo, true, {
+    outlineEnable: true,
+    outlineDistance: 2,
+    outlineColour: c_black,
+    outlineAlpha: 1
+});

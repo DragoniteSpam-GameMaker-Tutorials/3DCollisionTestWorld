@@ -4,6 +4,7 @@
     {"name":"Shapes","order":1,"path":"folders/Collision Stuff/Shapes.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"fnt_demo","order":9,"path":"fonts/fnt_demo/fnt_demo.yy",},
     {"name":"Col_Spatial_Hash","order":7,"path":"scripts/Col_Spatial_Hash/Col_Spatial_Hash.yy",},
     {"name":"Col_Shape_Plane","order":5,"path":"scripts/Col_Shape_Plane/Col_Shape_Plane.yy",},
     {"name":"Col_Shape_Triangle","order":9,"path":"scripts/Col_Shape_Triangle/Col_Shape_Triangle.yy",},
