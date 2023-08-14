@@ -39,6 +39,9 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
         matrix_set(matrix_world, tree.transform);
         vertex_submit(tree.model, pr_trianglelist, -1);
         self.things_drawn++;
+        if (self.draw_debug_shapes && i > 0) {
+            vertex_submit(vb_collision_block, pr_trianglelist, -1);
+        }
     }
 
     if (self.ball != undefined) {
@@ -50,8 +53,6 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     gpu_set_cullmode(cull_noculling);
     shader_reset();
     matrix_set(matrix_world, matrix_build_identity());
-    
-    //frustum.DebugDraw();
     
     gpu_set_zwriteenable(false);
     gpu_set_ztestenable(false);

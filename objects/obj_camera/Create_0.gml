@@ -12,8 +12,6 @@ vertex_format_add_texcoord();
 vertex_format_add_colour();
 format = vertex_format_end();
 
-show_debug_overlay(true, true);
-
 var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, 0), new Vector3(2000, 2000, 250));
 var quadtree = new ColWorldQuadtree(bounds, 3);
 collision_world = new ColWorld(quadtree);
