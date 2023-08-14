@@ -56,7 +56,7 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     shader_reset();
     matrix_set(matrix_world, matrix_build_identity());
     
-    frustum.DebugDraw();
+    //frustum.DebugDraw();
     
     gpu_set_zwriteenable(false);
     gpu_set_ztestenable(false);

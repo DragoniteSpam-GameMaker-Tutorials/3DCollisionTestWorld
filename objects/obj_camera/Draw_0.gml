@@ -31,7 +31,8 @@ camera_apply(cam);
 draw_all_the_things(view_mat, proj_mat);
 
 surface_reset_target();
-
+/*
 if (keyboard_check(vk_f1)) {
     obj_camera.collision_world.DebugDraw();
 }
+*/

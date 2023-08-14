@@ -46,11 +46,11 @@ with (player) {
         
         zspeed -= 0.075;
         
-        shape.position = shape.position.Add(new Vector3(dx, dy, zspeed));
+        shape.Set(shape.position.Add(new Vector3(dx, dy, zspeed)));
         
         var displaced_location = obj_camera.collision_world.DisplaceSphere(self.object);
         if (displaced_location != undefined) {
-            shape.position = displaced_location;
+            shape.Set(displaced_location);
         }
         
         self.x = self.shape.position.x;
