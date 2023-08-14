@@ -26,92 +26,47 @@ var y2 = 10000;
 
 vb_floor = vertex_create_buffer();
 vertex_begin(vb_floor, format);
-
-vertex_position_3d(vb_floor, x1, y1, 0);
-vertex_normal(vb_floor, 0, 0, 1);
-vertex_texcoord(vb_floor, 0, 0);
-vertex_colour(vb_floor, c_green, 1);
-
-vertex_position_3d(vb_floor, x2, y1, 0);
-vertex_normal(vb_floor, 0, 0, 1);
-vertex_texcoord(vb_floor, 0, 0);
-vertex_colour(vb_floor, c_green, 1);
-
-vertex_position_3d(vb_floor, x2, y2, 0);
-vertex_normal(vb_floor, 0, 0, 1);
-vertex_texcoord(vb_floor, 0, 0);
-vertex_colour(vb_floor, c_green, 1);
-
-vertex_position_3d(vb_floor, x2, y2, 0);
-vertex_normal(vb_floor, 0, 0, 1);
-vertex_texcoord(vb_floor, 0, 0);
-vertex_colour(vb_floor, c_green, 1);
-
-vertex_position_3d(vb_floor, x1, y2, 0);
-vertex_normal(vb_floor, 0, 0, 1);
-vertex_texcoord(vb_floor, 0, 0);
-vertex_colour(vb_floor, c_green, 1);
-
-vertex_position_3d(vb_floor, x1, y1, 0);
-vertex_normal(vb_floor, 0, 0, 1);
-vertex_texcoord(vb_floor, 0, 0);
-vertex_colour(vb_floor, c_green, 1);
-
+vertex_position_3d(vb_floor, x1, y1, 0); vertex_normal(vb_floor, 0, 0, 1); vertex_texcoord(vb_floor, 0, 0); vertex_colour(vb_floor, c_green, 1);
+vertex_position_3d(vb_floor, x2, y1, 0); vertex_normal(vb_floor, 0, 0, 1); vertex_texcoord(vb_floor, 0, 0); vertex_colour(vb_floor, c_green, 1);
+vertex_position_3d(vb_floor, x2, y2, 0); vertex_normal(vb_floor, 0, 0, 1); vertex_texcoord(vb_floor, 0, 0); vertex_colour(vb_floor, c_green, 1);
+vertex_position_3d(vb_floor, x2, y2, 0); vertex_normal(vb_floor, 0, 0, 1); vertex_texcoord(vb_floor, 0, 0); vertex_colour(vb_floor, c_green, 1);
+vertex_position_3d(vb_floor, x1, y2, 0); vertex_normal(vb_floor, 0, 0, 1); vertex_texcoord(vb_floor, 0, 0); vertex_colour(vb_floor, c_green, 1);
+vertex_position_3d(vb_floor, x1, y1, 0); vertex_normal(vb_floor, 0, 0, 1); vertex_texcoord(vb_floor, 0, 0); vertex_colour(vb_floor, c_green, 1);
 vertex_end(vb_floor);
 #endregion
 
 #region trees
-var data = buffer_load("tree_simple.vbuff");
-vb_tree_simple = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_simple);
-buffer_delete(data);
+var load = function(name, format) {
+    var data = buffer_load(name);
+    var vb = vertex_create_buffer_from_buffer(data, format);
+    vertex_freeze(vb);
+    buffer_delete(data);
+    return vb;
+};
 
-var data = buffer_load("tree_cone.vbuff");
-vb_tree_cone = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_cone);
-buffer_delete(data);
-
-var data = buffer_load("tree_cone_dark.vbuff");
-vb_tree_cone_dark = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_cone_dark);
-buffer_delete(data);
-
-var data = buffer_load("tree_detailed.vbuff");
-vb_tree_detailed = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_detailed);
-buffer_delete(data);
-
-var data = buffer_load("tree_fat.vbuff");
-vb_tree_fat = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_fat);
-buffer_delete(data);
-
-var data = buffer_load("tree_fat_dark.vbuff");
-vb_tree_fat_dark = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_fat_dark);
-buffer_delete(data);
+vb_tree_simple = load("tree_simple.vbuff", format);
+vb_tree_cone = load("tree_cone.vbuff", format);
+vb_tree_cone_dark = load("tree_cone_dark.vbuff", format);
+vb_tree_detailed = load("tree_detailed.vbuff", format);
+vb_tree_fat = load("tree_fat.vbuff", format);
+vb_tree_fat_dark = load("tree_fat_dark.vbuff", format);
+vb_tree_plateau_dark = load("tree_plateau_dark.vbuff", format);
 
 var data = buffer_load("tree_plateau.vbuff");
 vb_tree_plateau = vertex_create_buffer_from_buffer(data, format);
 vertex_freeze(vb_tree_plateau);
 
-vb_tree_plateau_data = [];
+vb_tree_plateau_data = array_create(buffer_get_size(data) / (36 * 3));
 
-for (var i = 0; i < buffer_get_size(data); i += 36 * 3) {
-    array_push(vb_tree_plateau_data,
-        new ColTriangle(
-            new Vector3(buffer_peek(data, i +  0, buffer_f32), buffer_peek(data, i +  4, buffer_f32), buffer_peek(data, i +  8, buffer_f32)),
-            new Vector3(buffer_peek(data, i + 36, buffer_f32), buffer_peek(data, i + 40, buffer_f32), buffer_peek(data, i + 44, buffer_f32)),
-            new Vector3(buffer_peek(data, i + 72, buffer_f32), buffer_peek(data, i + 76, buffer_f32), buffer_peek(data, i + 80, buffer_f32)),
-        )
+var index = 0;
+for (var i = 0, n = buffer_get_size(data); i < n; i += 36 * 3) {
+    vb_tree_plateau_data[index++] = new ColTriangle(
+        new Vector3(buffer_peek(data, i +  0, buffer_f32), buffer_peek(data, i +  4, buffer_f32), buffer_peek(data, i +  8, buffer_f32)),
+        new Vector3(buffer_peek(data, i + 36, buffer_f32), buffer_peek(data, i + 40, buffer_f32), buffer_peek(data, i + 44, buffer_f32)),
+        new Vector3(buffer_peek(data, i + 72, buffer_f32), buffer_peek(data, i + 76, buffer_f32), buffer_peek(data, i + 80, buffer_f32)),
     );
 }
 
-buffer_delete(data);
-
-var data = buffer_load("tree_plateau_dark.vbuff");
-vb_tree_plateau_dark = vertex_create_buffer_from_buffer(data, format);
-vertex_freeze(vb_tree_plateau_dark);
 buffer_delete(data);
 
 tree_models = [
@@ -140,31 +95,23 @@ tree_mesh.shape = new ColMesh(vb_tree_plateau_data);
 tree_mesh.transform = matrix_build(0, 0, 0, 0, 0, 0, 1, 1, 1);
 array_push(tree_objects, tree_mesh)
 collision_world.Add(new ColObject(tree_mesh.shape, tree_mesh, COLLISION_GROUP_BALL));
-
 #endregion
 
 #region player
 player = new PlayerObject();
 player.object = new ColObject(player.shape, player, COLLISION_GROUP_PLAYER | COLLISION_GROUP_BALL, COLLISION_GROUP_PLAYER);
 
-var data = buffer_load("player.vbuff");
-vb_player = vertex_create_buffer_from_buffer(data, format);
-buffer_delete(data);
+vb_player = load("player.vbuff", format);
 #endregion
 
 #region debug draw
-var data = buffer_load("collision_sphere.vbuff");
-vb_collision_sphere = vertex_create_buffer_from_buffer(data, format);
-buffer_delete(data);
-
-var data = buffer_load("collision_block.vbuff");
-vb_collision_block = vertex_create_buffer_from_buffer(data, format);
-buffer_delete(data);
+vb_collision_sphere = load("collision_sphere.vbuff", format);
+vb_collision_block = load("collision_block.vbuff", format);
 
 draw_debug_shapes = false;
+#endregion
 
 ball = undefined;
-#endregion
 
 var t1 = get_timer();
 setup_time = (t1 - t0) / 1000;
