@@ -74,7 +74,7 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 2000
+#macro TREE_COUNT 4000
 
 var t0 = get_timer();
 tree_objects = array_create(TREE_COUNT);

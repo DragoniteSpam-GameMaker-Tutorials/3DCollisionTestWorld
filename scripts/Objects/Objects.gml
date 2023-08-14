@@ -1,5 +1,5 @@
 function TreeObject(model) constructor {
-    var dist = random(1600) + 100;
+    var dist = random(2500) + 100;
     var angle = random(2 * pi);
     self.x = dist * cos(angle);
     self.y = -dist * sin(angle);
