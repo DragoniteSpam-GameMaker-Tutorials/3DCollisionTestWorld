@@ -20,18 +20,16 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     };
     
     static GetMin = function() {
-        return self.shape.GetMin();
+        return self.shape.point_min;
     };
     
     static GetMax = function() {
-        return self.shape.GetMax();
+        return self.shape.point_max;
     };
 }
 
-function ColWorld(bounds_min, bounds_max, max_depth) constructor {
-    self.bounds = NewColAABBFromMinMax(bounds_min, bounds_max);
-    self.accelerator = new ColWorldQuadtree(self.bounds, max_depth);
-    self.depth = max_depth;
+function ColWorld(accelerator) constructor {
+    self.accelerator = accelerator;
     
     static Add = function(object) {
         self.accelerator.Add(object);
@@ -70,11 +68,11 @@ function ColWorld(bounds_min, bounds_max, max_depth) constructor {
             var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
             if (displaced_position == undefined) break;
             
-            sphere_object.shape.position = displaced_position;
+            sphere_object.Set(sphere_object);
         }
         
         var displaced_position = sphere_object.shape.position;
-        sphere_object.shape.position = current_position;
+        sphere_object.Set(current_position);
         
         if (current_position == displaced_position) return undefined;
         
@@ -114,10 +112,12 @@ function ColWorldOctree(bounds, depth) constructor {
             new ColWorldOctree(new ColAABB(center.Add(new Vector3( sides.x, -sides.y,  sides.z)), sides), self.depth - 1),
         ];
         
-        for (var i = 0; i < 8; i++) {
-            var tree = self.children[i];
-            for (var j = 0; j < array_length(self.contents); j++) {
-                tree.Add(self.contents[j]);
+        var i = 0;
+        repeat (array_length(self.children)) {
+            var j = 0;
+            var tree = self.children[i++];
+            repeat (array_length(self.contents)) {
+                tree.Add(self.contents[j++]);
             }
         }
     };
@@ -133,8 +133,9 @@ function ColWorldOctree(bounds, depth) constructor {
         if (self.depth > 0) {
             self.Split();
             
-            for (var i = 0; i < array_length(self.children); i++) {
-                self.children[i].Add(object);
+            var i = 0;
+            repeat (array_length(self.children)) {
+                self.children[i++].Add(object);
             }
         }
     };
@@ -143,8 +144,9 @@ function ColWorldOctree(bounds, depth) constructor {
         var index = array_get_index(self.contents, object);
         if (index != -1) {
             array_delete(self.contents, index, 1);
-            for (var j = 0; j < array_length(self.children); j++) {
-                self.children[j].Remove(object);
+            var i = 0;
+            repeat (array_length(self.children)) {
+                self.children[j++].Remove(object);
             }
         }
     };
@@ -153,14 +155,17 @@ function ColWorldOctree(bounds, depth) constructor {
         if (!object.shape.CheckAABB(self.bounds)) return;
         
         if (self.children == undefined) {
-            for (var i = 0; i < array_length(self.contents); i++) {
+            var i = 0;
+            repeat (array_length(self.contents)) {
                 if (self.contents[i].CheckObject(object)) {
                     return self.contents[i];
                 }
+                i++;
             }
         } else {
-            for (var i = 0; i < array_length(self.children); i++) {
-                var recursive_result = self.children[i].CheckObject(object);
+            var i = 0;
+            repeat (array_length(self.children)) {
+                var recursive_result = self.children[i++].CheckObject(object);
                 if (recursive_result != undefined) return recursive_result;
             }
         }
@@ -169,18 +174,20 @@ function ColWorldOctree(bounds, depth) constructor {
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
-        if (!ray.CheckAABB(self.bounds, new RaycastHitInformation())) return;
+        if (!ray.CheckAABB(self.bounds)) return;
         
         var result = false;
         if (self.children == undefined) {
-            for (var i = 0; i < array_length(self.contents); i++) {
-                if (self.contents[i].CheckRay(ray, hit_info, group)) {
+            var i = 0;
+            repeat (array_length(self.contents)) {
+                if (self.contents[i++].CheckRay(ray, hit_info, group)) {
                     result = true;
                 }
             }
         } else {
-            for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckRay(ray, hit_info, group)) {
+            var i = 0;
+            repeat (array_length(self.children)) {
+                if (self.children[i++].CheckRay(ray, hit_info, group)) {
                     result = true;
                 }
             }
@@ -203,19 +210,14 @@ function ColWorldOctree(bounds, depth) constructor {
             return;
         }
         
-        for (var i = 0, n = array_length(self.children); i < n; i++) {
-            self.children[i].GetObjectsInFrustum(frustum, output);
+        var i = 0;
+        repeat (array_length(self.children)) {
+            self.children[i++].GetObjectsInFrustum(frustum, output);
         }
     };
 }
 
-function ColWorldQuadtree(bounds, depth) constructor {
-    self.bounds = bounds;
-    self.depth = depth;
-    
-    self.contents = [];
-    self.children = undefined;
-    
+function ColWorldQuadtree(bounds, depth) : ColWorldQuadtree(bounds, depth) constructor {
     static Split = function() {
         if (array_length(self.contents) == 0) return;
         if (self.children != undefined) return;
@@ -230,97 +232,13 @@ function ColWorldQuadtree(bounds, depth) constructor {
             new ColWorldQuadtree(new ColAABB(center.Add(new Vector3(-sides.x, -sides.y, 0)), sides), self.depth - 1),
         ];
         
-        for (var i = 0; i < array_length(self.children); i++) {
-            var tree = self.children[i];
-            for (var j = 0; j < array_length(self.contents); j++) {
-                tree.Add(self.contents[j]);
+        var i = 0;
+        repeat (array_length(self.children)) {
+            var j = 0;
+            var tree = self.children[i++];
+            repeat (array_length(self.contents)) {
+                tree.Add(self.contents[j++]);
             }
-        }
-    };
-    
-    static Add = function(object) {
-        if (!object.shape.CheckAABB(self.bounds)) return;
-        for (var i = 0; i < array_length(self.contents); i++) {
-            if (self.contents[i] == object) return;
-        }
-        
-        array_push(self.contents, object);
-        
-        if (self.depth > 0) {
-            self.Split();
-            
-            for (var i = 0; i < array_length(self.children); i++) {
-                self.children[i].Add(object);
-            }
-        }
-    };
-    
-    static Remove = function(object) {
-        var index = array_get_index(self.contents, object);
-        if (index != -1) {
-            array_delete(self.contents, index, 1);
-            for (var j = 0; j < array_length(self.children); j++) {
-                self.children[j].Remove(object);
-            }
-        }
-    };
-    
-    static CheckObject = function(object) {
-        if (!object.shape.CheckAABB(self.bounds)) return;
-        
-        if (self.children == undefined) {
-            for (var i = 0; i < array_length(self.contents); i++) {
-                if (self.contents[i].CheckObject(object)) {
-                    return self.contents[i];
-                }
-            }
-        } else {
-            for (var i = 0; i < array_length(self.children); i++) {
-                var recursive_result = self.children[i].CheckObject(object);
-                if (recursive_result != undefined) return recursive_result;
-            }
-        }
-        
-        return undefined;
-    };
-    
-    static CheckRay = function(ray, hit_info, group = 1) {
-        if (!ray.CheckAABB(self.bounds, new RaycastHitInformation())) return;
-        
-        var result = false;
-        if (self.children == undefined) {
-            for (var i = 0; i < array_length(self.contents); i++) {
-                if (self.contents[i].CheckRay(ray, hit_info, group)) {
-                    result = true;
-                }
-            }
-        } else {
-            for (var i = 0; i < array_length(self.children); i++) {
-                if (self.children[i].CheckRay(ray, hit_info, group)) {
-                    result = true;
-                }
-            }
-        }
-        
-        return result;
-    };
-    
-    static GetObjectsInFrustum = function(frustum, output) {
-        var status = self.bounds.CheckFrustum(frustum);
-        
-        if (status == EFrustumResults.OUTSIDE)
-            return;
-        
-        if (status == EFrustumResults.INSIDE || self.children == undefined) {
-            var output_length = array_length(output);
-            var contents_length = array_length(self.contents);
-            array_resize(output, output_length + contents_length);
-            array_copy(output, output_length, self.contents, 0, contents_length);
-            return;
-        }
-        
-        for (var i = 0, n = array_length(self.children); i < n; i++) {
-            self.children[i].GetObjectsInFrustum(frustum, output);
         }
     };
 }

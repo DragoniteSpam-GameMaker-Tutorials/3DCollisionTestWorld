@@ -15,6 +15,8 @@ camera_apply(cam);
 
 draw_all_the_things(view_mat, proj_mat);
 
+return;
+
 if (!surface_exists(self.preview_surface)) {
     self.preview_surface = surface_create(480, 320);
 }

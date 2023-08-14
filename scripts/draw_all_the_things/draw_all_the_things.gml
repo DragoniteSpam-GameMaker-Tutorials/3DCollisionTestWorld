@@ -9,16 +9,16 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     vertex_submit(vb_floor, pr_trianglelist, -1);
 
     var duck_angle = ((player.direction - player.face_direction) + 360) % 360;
-    if (duck_angle >= 315 || duck_angle < 45) {
+    if (duck_angle >= 310 || duck_angle < 50) {
         var zrot = 90;
         var spr = duck_front;
-    } else if (duck_angle >= 225) {
+    } else if (duck_angle >= 230) {
         var zrot = 0;
         var spr = duck_right;
-    } else if (duck_angle >= 135) {
+    } else if (duck_angle >= 130) {
         var zrot = 90;
         var spr = duck_back;
-    } else if (duck_angle >= 45) {
+    } else if (duck_angle >= 50) {
         var zrot = 180;
         var spr = duck_left;
     }
@@ -36,11 +36,12 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
     
     //for (var i = 0,n = array_length(self.tree_objects); i < n; i++) {
     for (var i = 0, n = array_length(objects); i < n; i++) {
+        //var tree = self.tree_objects[i];
         var tree = objects[i].reference;
         matrix_set(matrix_world, tree.transform);
-        //vertex_submit(tree.model, pr_trianglelist, -1);
+        vertex_submit(tree.model, pr_trianglelist, -1);
         //if (draw_debug_shapes && i > 0) {
-            vertex_submit(vb_collision_block, pr_trianglelist, -1);
+            //vertex_submit(vb_collision_block, pr_trianglelist, -1);
         //}
         self.things_drawn++;
     }

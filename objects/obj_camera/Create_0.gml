@@ -12,7 +12,7 @@ vertex_format_add_texcoord();
 vertex_format_add_colour();
 format = vertex_format_end();
 
-show_debug_overlay(true);
+//show_debug_overlay(true);
 
 collision_world = new ColWorld(new Vector3(-2000, -2000, 0), new Vector3(2000, 2000, 250), 3);
 //collision_world = new ColWorldSpatialHash(50);
@@ -118,7 +118,11 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 400
+#macro TREE_COUNT 3000
+
+var t0 = get_timer();
+window_set_fullscreen(true)
+surface_resize(application_surface, window_get_width(), window_get_height())
 
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
@@ -163,5 +167,8 @@ draw_debug_shapes = false;
 
 ball = undefined;
 #endregion
+
+var t1 = get_timer();
+show_debug_message($"adding all the things took {(t1 - t0) / 1000} ms");
 
 window_mouse_set(window_get_width() / 2, window_get_height() / 2);
