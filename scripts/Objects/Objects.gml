@@ -26,7 +26,6 @@ function PlayerObject() constructor {
     self.pitch = -30;
     self.face_direction = 180;
     self.distance = 40;
-    self.mouse_lock = true;
     self.frame = 0;
     self.shape = new ColSphere(new Vector3(self.x, self.y, 0 + 8), 8);
     self.is_ghost = false;

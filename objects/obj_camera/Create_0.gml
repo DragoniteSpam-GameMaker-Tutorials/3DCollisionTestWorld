@@ -170,4 +170,4 @@ ball = undefined;
 var t1 = get_timer();
 show_debug_message($"adding all the things took {(t1 - t0) / 1000} ms");
 
-window_mouse_set(window_get_width() / 2, window_get_height() / 2);
+window_mouse_set_locked(true);
