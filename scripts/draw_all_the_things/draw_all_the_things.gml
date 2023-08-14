@@ -1,10 +1,9 @@
-function draw_all_the_things(cull_view_mat, cull_proj_mat) {
-    var frustum = new ColCameraFrustum(new Matrix4(cull_view_mat), new Matrix4(cull_proj_mat));
-    
+function draw_all_the_things(objects) {
     gpu_set_cullmode(cull_counterclockwise);
     gpu_set_zwriteenable(true);
     gpu_set_ztestenable(true);
     shader_set(shd_demo);
+    draw_clear(c_black);
 
     vertex_submit(vb_floor, pr_trianglelist, -1);
 
@@ -31,8 +30,6 @@ function draw_all_the_things(cull_view_mat, cull_proj_mat) {
 
     var cutoff = dcos(60);
     self.things_drawn = 0;
-    
-    var objects = self.collision_world.GetObjectsInFrustum(frustum);
     
     for (var i = 0, n = array_length(objects); i < n; i++) {
         var tree = objects[i].reference;

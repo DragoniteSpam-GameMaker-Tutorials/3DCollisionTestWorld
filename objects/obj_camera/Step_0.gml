@@ -102,3 +102,10 @@ if (keyboard_check_pressed(ord("F"))) {
 if (self.ball) {
     self.ball.Update();
 }
+
+var ww = window_get_width();
+var hh = window_get_height();
+
+if (surface_get_width(application_surface) != ww || surface_get_height(application_surface) != hh) {
+    surface_resize(application_surface, ww, hh);
+}
