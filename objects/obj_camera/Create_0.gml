@@ -12,7 +12,7 @@ vertex_format_add_texcoord();
 vertex_format_add_colour();
 format = vertex_format_end();
 
-//show_debug_overlay(true);
+show_debug_overlay(true, true);
 
 var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, 0), new Vector3(2000, 2000, 250));
 var quadtree = new ColWorldQuadtree(bounds, 3);
@@ -122,8 +122,6 @@ tree_models = [
 #macro TREE_COUNT 3000
 
 var t0 = get_timer();
-window_set_fullscreen(true)
-surface_resize(application_surface, window_get_width(), window_get_height())
 
 tree_objects = array_create(TREE_COUNT);
 tree_objects[0] = new FloorObject(vb_floor);
