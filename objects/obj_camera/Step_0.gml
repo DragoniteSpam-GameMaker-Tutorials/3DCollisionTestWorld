@@ -109,4 +109,5 @@ var hh = window_get_height();
 if (surface_get_width(application_surface) != ww || surface_get_height(application_surface) != hh) {
     surface_resize(application_surface, ww, hh);
 }
+
 display_set_gui_maximize();

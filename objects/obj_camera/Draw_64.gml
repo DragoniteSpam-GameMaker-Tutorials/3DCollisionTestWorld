@@ -1,8 +1,8 @@
 draw_set_font(fnt_demo);
 var n = 0;
 var s = 28;
-draw_text(32, 32 + s * n++, $"Setup time: {self.setup_time}, ms");
-draw_text(32, 32 + s * n++, $"Things drawn: {self.things_drawn}/{TREE_COUNT}");
+draw_text(32, 32 + s * n++, $"Setup time: {self.setup_time} ms");
+draw_text(32, 32 + s * n++, $"Things drawn: {self.things_drawn}/{TREE_COUNT} things in world");
 draw_text(32, 32 + s * n++, $"World type: {instanceof(self.collision_world.accelerator)}");
 draw_text(32, 32 + s * n++, $"FPS: {fps}/{fps_real}");
 draw_text(32, 32 + s * n++, "Press Tab to toggle mouse lock");
