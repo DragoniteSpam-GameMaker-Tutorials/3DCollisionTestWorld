@@ -103,11 +103,11 @@ if (self.ball) {
     self.ball.Update();
 }
 
-var ww = window_get_width();
-var hh = window_get_height();
+var ww = os_browser == browser_not_a_browser ? window_get_width() : display_get_width();
+var hh = os_browser == browser_not_a_browser ? window_get_height() : display_get_height();
 
 if (surface_get_width(application_surface) != ww || surface_get_height(application_surface) != hh) {
     surface_resize(application_surface, ww, hh);
 }
 
-display_set_gui_maximize();
+display_set_gui_size(ww, hh);
