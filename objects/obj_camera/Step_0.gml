@@ -79,9 +79,16 @@ with (player) {
         #endregion
         
         if (keyboard_check_pressed(ord("T"))) {
+            var velocity = 4;
+            var xto = self.x;
+            var yto = self.y;
+            var zto = self.z + 16;
+            var xfrom = xto + self.distance * dcos(self.direction) * dcos(self.pitch);
+            var yfrom = yto - self.distance * dsin(self.direction) * dcos(self.pitch);
+            var zfrom = zto - self.distance * dsin(self.pitch);
             obj_camera.ball = new BallObject(
                 new Vector3(self.x, self.y, self.z),
-                new Vector3(-4 * dcos(self.direction) * dcos(self.pitch), -4 * -dsin(self.direction) * dcos(self.pitch), max(0, 4 * dsin(self.pitch)))
+                new Vector3(xto - xfrom, yto - yfrom, zto - zfrom).Normalize().Mul(velocity)
             );
         }
     }

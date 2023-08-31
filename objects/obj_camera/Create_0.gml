@@ -14,7 +14,9 @@ format = vertex_format_end();
 
 var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, 0), new Vector3(2000, 2000, 250));
 var quadtree = new ColWorldQuadtree(bounds, 3);
-collision_world = new ColWorld(quadtree);
+var octree = new ColWorldOctree(bounds, 3);
+var sph = new ColWorldSpatialHash(32);
+collision_world = new ColWorld(octree);
 
 #region floor
 var x1 = -10000;
