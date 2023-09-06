@@ -22,7 +22,9 @@ function ColMesh(triangle_array) constructor {
     
     self.accelerator = new self.octree(self.bounds, self.octree);
     self.accelerator.triangles = triangle_array;
+    var t = get_timer();
     self.accelerator.Split(3);
+    show_debug_message($"hierarching the tree took {(get_timer() - t) / 1000} ms")
     
     static octree = function(bounds, octree) constructor {
         self.bounds = bounds;
@@ -33,7 +35,7 @@ function ColMesh(triangle_array) constructor {
         
         static Split = function(depth) {
             if (depth == 0) return;
-            if (array_length(self.triangles) == 0) return;
+            if (array_length(self.triangles) < COL_MIN_TREE_DENSITY) return;
             if (self.children != undefined) return;
             
             var center = self.bounds.position;
