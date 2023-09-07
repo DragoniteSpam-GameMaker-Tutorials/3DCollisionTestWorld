@@ -9,8 +9,8 @@ view_mat = matrix_build_lookat(xfrom, yfrom, zfrom, xto, yto, zto, 0, 0, 1);
 proj_mat = matrix_build_projection_perspective_fov(-60, -16 / 9, 1, 800);
 
 var t = get_timer();
-var frustum = new ColCameraFrustum(new Matrix4(view_mat), new Matrix4(proj_mat));
-show_debug_message($"Getting all the things in the frustum took {(get_timer() - t) / 1000} ms");
+var frustum = new ColCameraFrustum(view_mat, proj_mat);
+//show_debug_message($"Getting all the things in the frustum took {(get_timer() - t) / 1000} ms");
 var objects = self.collision_world.GetObjectsInFrustum(frustum);
 
 var cam = camera_get_active();
@@ -18,7 +18,7 @@ camera_set_view_mat(cam, view_mat);
 camera_set_proj_mat(cam, proj_mat);
 camera_apply(cam);
 
-//objects = self.tree_objects;
+objects = self.tree_objects;
 draw_all_the_things(objects);
 
 if (!surface_exists(self.preview_surface)) {

@@ -12,11 +12,11 @@ vertex_format_add_texcoord();
 vertex_format_add_colour();
 format = vertex_format_end();
 
-var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, 0), new Vector3(2000, 2000, 250));
+var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, -25), new Vector3(2000, 2000, 250));
 var quadtree = new ColWorldQuadtree(bounds, 3);
 var octree = new ColWorldOctree(bounds, 3);
 var sph = new ColWorldSpatialHash(32);
-collision_world = new ColWorld(octree);
+collision_world = new ColWorld(sph);
 
 #region floor
 var x1 = -10000;
@@ -74,7 +74,7 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 4000
+#macro TREE_COUNT 2
 #macro web:TREE_COUNT 1500
 
 var t0 = get_timer();

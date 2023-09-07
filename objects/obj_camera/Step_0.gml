@@ -79,7 +79,7 @@ with (player) {
         #endregion
         
         if (keyboard_check_pressed(ord("T"))) {
-            var velocity = 4;
+            var velocity = 1;
             var xto = self.x;
             var yto = self.y;
             var zto = self.z + 16;
@@ -88,7 +88,7 @@ with (player) {
             var zfrom = zto - self.distance * dsin(self.pitch);
             obj_camera.ball = new BallObject(
                 new Vector3(self.x, self.y, self.z),
-                new Vector3(xto - xfrom, yto - yfrom, zto - zfrom).Normalize().Mul(velocity)
+                new Vector3(xto - xfrom, yto - yfrom, 0).Normalize().Mul(velocity)
             );
         }
     }

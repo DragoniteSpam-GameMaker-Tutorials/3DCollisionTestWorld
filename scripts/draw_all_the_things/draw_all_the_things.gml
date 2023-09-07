@@ -32,7 +32,7 @@ function draw_all_the_things(objects) {
     self.things_drawn = 0;
     
     for (var i = 0, n = array_length(objects); i < n; i++) {
-        var tree = objects[i].reference;
+        var tree = objects[i]//.reference;
         matrix_set(matrix_world, tree.transform);
         vertex_submit(tree.model, pr_trianglelist, -1);
         self.things_drawn++;
