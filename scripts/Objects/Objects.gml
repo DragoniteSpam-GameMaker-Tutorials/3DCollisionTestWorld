@@ -36,7 +36,7 @@ function PlayerObject() constructor {
 function BallObject(position, velocity) constructor {
     self.position = position;
     self.velocity = velocity;
-	self.stopped = false;
+    self.stopped = false;
     
     static Update = function() {
         var ray = new ColRay(self.position, self.velocity);

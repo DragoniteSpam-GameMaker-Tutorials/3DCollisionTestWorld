@@ -5,14 +5,14 @@ function ColOBB(position, size, orientation) constructor {
         self.position = position;
         self.size = size;
         self.orientation = orientation;
-		
+        
         var ox = new Vector3(orientation[ 0], orientation[ 1], orientation[ 2]);
         var oy = new Vector3(orientation[ 4], orientation[ 5], orientation[ 6]);
         var oz = new Vector3(orientation[ 8], orientation[ 9], orientation[10]);
-		self.property_orientation_array = [ox, oy, oz];
-		var xs = ox.Mul(size.x);
-		var ys = oy.Mul(size.y);
-		var zs = oz.Mul(size.z);
+        self.property_orientation_array = [ox, oy, oz];
+        var xs = ox.Mul(size.x);
+        var ys = oy.Mul(size.y);
+        var zs = oz.Mul(size.z);
         
         self.property_vertices = [
             position.Add(xs).Add(ys).Add(zs),
@@ -481,7 +481,7 @@ function ColOBB(position, size, orientation) constructor {
         );
         
         if (tmax < 0) return false;
-		
+        
         var tmin = max(
             min(t[0], t[1]),
             min(t[2], t[3]),

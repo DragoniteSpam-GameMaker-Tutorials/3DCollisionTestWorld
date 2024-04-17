@@ -78,12 +78,12 @@ function mat4_inverse(mat) {
     var determinant = mat[0] * results[0] + mat[1] * results[4] + mat[2] * results[8] + mat[3] * results[12];
     
     if (determinant == 0) {
-    	return undefined;
+        return undefined;
     }
     
     var i = 0;
     repeat (16) {
-    	results[i++] /= determinant;
+        results[i++] /= determinant;
     }
     
     return results;
