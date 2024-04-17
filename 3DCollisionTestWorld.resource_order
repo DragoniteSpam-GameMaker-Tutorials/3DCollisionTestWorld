@@ -1,9 +1,9 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"Collision Stuff","order":1,"path":"folders/Collision Stuff.yy",},
     {"name":"Shapes","order":1,"path":"folders/Collision Stuff/Shapes.yy",},
   ],
-  "ResourceOrderSettings": [
+  "ResourceOrderSettings":[
     {"name":"Col_Changelog","order":3,"path":"notes/Col_Changelog/Col_Changelog.yy",},
     {"name":"Col_Shape_Sphere","order":8,"path":"scripts/Col_Shape_Sphere/Col_Shape_Sphere.yy",},
     {"name":"Col_Shape_Line","order":2,"path":"scripts/Col_Shape_Line/Col_Shape_Line.yy",},
