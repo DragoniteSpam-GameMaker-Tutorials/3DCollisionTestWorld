@@ -16,7 +16,7 @@ var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, -25), new Vector3(20
 var quadtree = new ColWorldQuadtree(bounds, 3);
 var octree = new ColWorldOctree(bounds, 3);
 var sph = new ColWorldSpatialHash(32);
-collision_world = new ColWorld(sph);
+collision_world = new ColWorld(quadtree);
 
 #region floor
 var x1 = -10000;
@@ -74,7 +74,7 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 2
+#macro TREE_COUNT 2000
 #macro web:TREE_COUNT 1500
 
 var t0 = get_timer();
@@ -88,7 +88,7 @@ for (var i = 1; i < TREE_COUNT; i++) {
     tree_objects[i] = tree;
     collision_world.Add(new ColObject(tree.shape, tree, COLLISION_GROUP_PLAYER | COLLISION_GROUP_BALL));
 }
-
+/*
 tree_mesh = new TreeObject(vb_tree_plateau);
 tree_mesh.x = 0;
 tree_mesh.y = 0;
@@ -96,6 +96,7 @@ tree_mesh.shape = new ColMesh(vb_tree_plateau_data);
 tree_mesh.transform = matrix_build(0, 0, 0, 0, 0, 0, 1, 1, 1);
 array_push(tree_objects, tree_mesh)
 collision_world.Add(new ColObject(tree_mesh.shape, tree_mesh, COLLISION_GROUP_BALL));
+*/
 #endregion
 
 #region player

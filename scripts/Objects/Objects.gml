@@ -1,5 +1,5 @@
 function TreeObject(model) constructor {
-    #macro TREE_RANGE 50
+    #macro TREE_RANGE 1000
     #macro web:TREE_RANGE 1500
     var dist = random(TREE_RANGE) + 100;
     var angle = random(2 * pi);
@@ -7,7 +7,8 @@ function TreeObject(model) constructor {
     self.y = -dist * sin(angle);
     self.model = model;
     //self.shape = new ColAABB(new Vector3(self.x, self.y, 16), new Vector3(8, 8, 16));
-    self.transform = matrix_build(self.x, self.y, 0, random(360), random(360), random(360), 1, 1, 1);
+    //self.transform = matrix_build(self.x, self.y, 0, random(360), random(360), random(360), 1, 1, 1);
+    self.transform = matrix_build(self.x, self.y, 0, 0, 0, random(360), 1, 1, 1);
     self.shape = new ColOBB(new Vector3(self.x, self.y, 16), new Vector3(8, 8, 16), self.transform);
 }
 
