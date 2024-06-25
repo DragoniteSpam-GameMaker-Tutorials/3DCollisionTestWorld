@@ -1,61 +1,3 @@
-function Matrix3(x1_or_array, y1, z1, x2, y2, z2, x3, y3, z3) constructor {
-    if (is_array(x1_or_array)) {
-        var m = x1_or_array;
-        self.x = new Vector3(m[0], m[3], m[6]);
-        self.y = new Vector3(m[1], m[4], m[7]);
-        self.z = new Vector3(m[2], m[5], m[8]);
-        
-        self.linear_array = x1_or_array;
-    } else {
-        var x1 = x1_or_array;
-        self.x = new Vector3(x1, x2, x3);
-        self.y = new Vector3(y1, y2, y3);
-        self.z = new Vector3(z1, z2, z3);
-    
-        self.linear_array = [
-            self.x.x, self.y.x, self.z.x,
-            self.x.y, self.y.y, self.z.y,
-            self.x.z, self.y.z, self.z.z
-        ];
-    }
-    
-    //  x  y  z
-    // x1 y1 z1
-    // x2 y2 z2
-    // x3 y3 z3
-}
-
-function Matrix4(x1_or_array, y1, z1, w1, x2, y2, z2, w2, x3, y3, z3, w3, x4, y4, z4, w4) constructor {
-    if (is_array(x1_or_array)) {
-        var m = x1_or_array;
-        self.x = new Vector4(m[ 0], m[ 4], m[ 8], m[12]);
-        self.y = new Vector4(m[ 1], m[ 5], m[ 9], m[13]);
-        self.z = new Vector4(m[ 2], m[ 6], m[10], m[14]);
-        self.w = new Vector4(m[ 3], m[ 7], m[11], m[15]);
-        
-        self.linear_array = x1_or_array;
-    } else {
-        var x1 = x1_or_array;
-        self.x = new Vector4(x1, x2, x3, x4);
-        self.y = new Vector4(y1, y2, y3, y4);
-        self.z = new Vector4(z1, z2, z3, z4);
-        self.w = new Vector4(w1, w2, w3, w4);
-    
-        self.linear_array = [
-            self.x.x, self.y.x, self.z.x, self.w.x,
-            self.x.y, self.y.y, self.z.y, self.w.y,
-            self.x.z, self.y.z, self.z.z, self.w.z,
-            self.x.w, self.y.w, self.z.w, self.w.w
-        ];
-    }
-    
-    //  x  y  z  w
-    // x1 y1 z1 w1
-    // x2 y2 z2 w2
-    // x3 y3 z3 w3
-    // x4 y4 z4 w4
-}
-
 function mat4_inverse(mat) {
     var results = array_create(16);
     results[0]  =  mat[ 5] * mat[10] * mat[15] - mat[ 5] * mat[11] * mat[14] - mat[ 9] * mat[ 6] * mat[15] + mat[ 9] * mat[ 7] * mat[14] + mat[13] * mat[ 6] * mat[11] - mat[13] * mat[ 7] * mat[10];
@@ -78,15 +20,23 @@ function mat4_inverse(mat) {
     var determinant = mat[0] * results[0] + mat[1] * results[4] + mat[2] * results[8] + mat[3] * results[12];
     
     if (determinant == 0) {
-        return undefined;
+    	return undefined;
     }
-    
-    var i = 0;
-    repeat (16) {
-        results[i++] /= determinant;
-    }
-    
+	
+	array_map_ext(results, method({ determinant: determinant }, function(val) {
+		return val / self.determinant;
+	}));
+	
     return results;
+}
+
+function mat4_determinant(mat) {
+    var r1 =  mat[ 5] * mat[10] * mat[15] - mat[ 5] * mat[11] * mat[14] - mat[ 9] * mat[ 6] * mat[15] + mat[ 9] * mat[ 7] * mat[14] + mat[13] * mat[ 6] * mat[11] - mat[13] * mat[ 7] * mat[10];
+    var r2 = -mat[ 4] * mat[10] * mat[15] + mat[ 4] * mat[11] * mat[14] + mat[ 8] * mat[ 6] * mat[15] - mat[ 8] * mat[ 7] * mat[14] - mat[12] * mat[ 6] * mat[11] + mat[12] * mat[ 7] * mat[10];
+    var r3 =  mat[ 4] * mat[ 9] * mat[15] - mat[ 4] * mat[11] * mat[13] - mat[ 8] * mat[ 5] * mat[15] + mat[ 8] * mat[ 7] * mat[13] + mat[12] * mat[ 5] * mat[11] - mat[12] * mat[ 7] * mat[ 9];
+    var r4 = -mat[ 4] * mat[ 9] * mat[14] + mat[ 4] * mat[10] * mat[13] + mat[ 8] * mat[ 5] * mat[14] - mat[ 8] * mat[ 6] * mat[13] - mat[12] * mat[ 5] * mat[10] + mat[12] * mat[ 6] * mat[ 9];
+    
+    return mat[0] * r1 + mat[1] * r2 + mat[2] * r3 + mat[3] * r4;
 }
 
 function mat4_mul_point(mat, point) {

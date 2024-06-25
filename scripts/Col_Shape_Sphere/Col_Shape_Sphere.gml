@@ -75,7 +75,7 @@ function ColSphere(position, radius) constructor {
         return model.CheckSphere(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var dir = ray.direction;
         var o = ray.origin;
         var p = self.position;
@@ -132,11 +132,11 @@ function ColSphere(position, radius) constructor {
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
     
     static CheckFrustum = function(frustum) {

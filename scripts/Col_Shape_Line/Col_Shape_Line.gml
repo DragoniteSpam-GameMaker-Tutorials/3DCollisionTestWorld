@@ -72,7 +72,7 @@ function ColLine(start, finish) constructor {
         return model.CheckLine(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         return false;
     };
     
@@ -206,10 +206,10 @@ function ColLine(start, finish) constructor {
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
 }

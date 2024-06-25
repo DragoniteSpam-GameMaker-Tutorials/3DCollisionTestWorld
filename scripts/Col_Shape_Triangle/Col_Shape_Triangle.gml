@@ -258,7 +258,7 @@ function ColTriangle(a, b, c) constructor {
         return model.CheckTriangle(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         static plane_hit_info = new RaycastHitInformation();
         plane_hit_info.shape = undefined;
         plane_hit_info.point = undefined;
@@ -311,11 +311,11 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static GetNormal = function() {
-        return self.property_normal;
+        return self.property_normal.Clone();
     };
     
     static GetPlane = function() {
-        return self.property_plane;
+        return new ColPlane(self.property_plane.normal, self.property_plane.distance);
     };
     
     static NearestPoint = function(vec3) {
@@ -400,10 +400,10 @@ function ColTriangle(a, b, c) constructor {
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
 }

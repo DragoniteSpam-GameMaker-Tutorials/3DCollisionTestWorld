@@ -3,6 +3,7 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     self.reference = reference;
     self.mask = mask;                                   // what other objects can collide with me
     self.group = group;                                 // what masks i can detect collisions with
+	shape.object = self;
     
     static CheckObject = function(object) {
         if (object == self) return false;
@@ -48,11 +49,12 @@ function ColWorld(accelerator) constructor {
         return self.accelerator.CheckObject(object);
     };
     
-    static CheckRay = function(ray, group = 1) {
+    static CheckRay = function(ray, group = 1, distance = infinity) {
         var hit_info = new RaycastHitInformation();
         
         if (self.accelerator.CheckRay(ray, hit_info, group)) {
-            return hit_info;
+			if (hit_info.distance <= distance)
+	            return hit_info;
         }
         
         return undefined;
@@ -82,7 +84,7 @@ function ColWorld(accelerator) constructor {
     static GetObjectsInFrustum = function(frustum) {
         var output = [];
         self.accelerator.GetObjectsInFrustum(frustum, output);
-        array_unique_ext(output);
+		array_unique_ext(output);
         return output;
     };
 }
@@ -147,9 +149,11 @@ function ColWorldOctree(bounds, depth) constructor {
         var index = array_get_index(self.contents, object);
         if (index != -1) {
             array_delete(self.contents, index, 1);
-            array_foreach(self.children, method({ object: object }, function(subdivision) {
-                subdivision.Remove(self.object);
-            }));
+			if (self.children != undefined) {
+	            array_foreach(self.children, method({ object: object }, function(subdivision) {
+	                subdivision.Remove(self.object);
+	            }));
+			}
         }
     };
     

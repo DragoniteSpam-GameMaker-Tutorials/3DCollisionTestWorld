@@ -74,7 +74,7 @@ function ColPoint(position) constructor {
         return model.CheckPoint(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var p = self.position;
         var nearest = ray.NearestPoint(p);
         if (point_distance_3d(nearest.x, nearest.y, nearest.z, p.x, p.y, p.z) > 0) return false;
@@ -103,11 +103,11 @@ function ColPoint(position) constructor {
     };
     
     static GetMin = function() {
-        return self.position;
+        return self.position.Clone();
     };
     
     static GetMax = function() {
-        return self.position;
+        return self.position.Clone();
     };
     
     static CheckFrustum = function(frustum) {

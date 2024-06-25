@@ -1,4 +1,6 @@
 function ColAABB(position, half_extents) constructor {
+    self.position = undefined;
+    self.half_extents = undefined;
     self.Set(position, half_extents);
     
     static Set = function(position = self.position, half_extents = self.half_extents) {
@@ -176,7 +178,7 @@ function ColAABB(position, half_extents) constructor {
         return model.CheckAABB(self);
     };
     
-    static CheckRay = function(ray, hit_info) {
+    static CheckRay = function(ray, hit_info = undefined) {
         var box_min = self.property_min;
         var box_max = self.property_max;
         
@@ -285,19 +287,23 @@ function ColAABB(position, half_extents) constructor {
     };
     
     static GetVertices = function() {
-        return self.property_vertices;
+        return array_map(self.property_vertices, function(item) {
+			return item.Clone();
+		});
     };
     
     static GetEdges = function() {
-        return self.property_edges;
+        return array_map(self.property_edges, function(item) {
+			return new ColLine(item.start, item.finish);
+		});
     };
     
     static GetMin = function() {
-        return self.property_min;
+        return self.property_min.Clone();
     };
     
     static GetMax = function() {
-        return self.property_max;
+        return self.property_max.Clone();
     };
     
     static CheckFrustum = function(frustum) {
