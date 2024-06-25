@@ -1,3 +1,5 @@
+#macro BUILD_FOR_WEB                    (os_browser != browser_not_a_browser)
+
 #macro COLLISION_GROUP_PLAYER           0x01
 #macro COLLISION_GROUP_BALL             0x02
 #macro COLLISION_GROUP_GHOST            0x04
@@ -74,8 +76,7 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
-#macro TREE_COUNT 2000
-#macro web:TREE_COUNT 1500
+#macro TREE_COUNT (BUILD_FOR_WEB ? 1500 : 2000)
 
 var t0 = get_timer();
 tree_objects = array_create(TREE_COUNT);

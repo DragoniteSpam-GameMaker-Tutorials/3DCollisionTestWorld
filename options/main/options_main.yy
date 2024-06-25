@@ -1,11 +1,7 @@
 {
   "$GMMainOptions":"v1",
   "%Name":"Main",
-  "ConfigValues":{
-    "web":{
-      "option_gameguid":"9ba9990d-9800-4648-a6cc-16ec4959bb8c",
-    },
-  },
+  "ConfigValues":{},
   "name":"Main",
   "option_author":"",
   "option_collision_compatibility":true,

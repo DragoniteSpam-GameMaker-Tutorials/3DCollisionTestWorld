@@ -1,19 +1,7 @@
 {
   "$GMOperaGXOptions":"",
   "%Name":"operagx",
-  "ConfigValues":{
-    "web":{
-      "option_operagx_game_name":"3D Collision Demo",
-      "option_operagx_mod_game_name":"3DCollisionTestWorld",
-      "option_operagx_editUrl":"https://create.gx.games/game/0f6a59f5-84eb-4406-b91c-332af83f6943/edit",
-      "option_operagx_team_id":"f7c900d5-eb8e-48f5-a731-b62d935bf054",
-      "option_operagx_team_name":"dragonitespam studio",
-      "option_operagx_version":"1.0.0.6",
-      "option_operagx_next_version":"1.0.0.7",
-      "option_operagx_internalShareUrl":"https://gx.games/games/o9renn/3d-collision-demo/tracks/1888e142-942b-4deb-b94c-337f95a2ce4b/",
-      "option_operagx_publicShareUrl":"https://gx.games/games/o9renn/3d-collision-demo/",
-    },
-  },
+  "ConfigValues":{},
   "name":"operagx",
   "option_operagx_display_cursor":true,
   "option_operagx_editUrl":"https://create.gx.games/game/0f6a59f5-84eb-4406-b91c-332af83f6943/edit",
