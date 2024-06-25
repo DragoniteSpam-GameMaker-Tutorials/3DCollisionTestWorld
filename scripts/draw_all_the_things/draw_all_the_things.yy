@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"draw_all_the_things",
   "isCompatibility":false,
   "isDnD":false,

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"Col_SAT_Stuff",
   "isCompatibility":false,
   "isDnD":false,

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"Col_Vector",
   "isCompatibility":false,
   "isDnD":false,

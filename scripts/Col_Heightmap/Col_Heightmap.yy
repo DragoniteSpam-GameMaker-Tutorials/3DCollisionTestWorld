@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"Col_Heightmap",
   "isCompatibility":false,
   "isDnD":false,

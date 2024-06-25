@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"Col_Spatial_Hash",
   "isCompatibility":false,
   "isDnD":false,

@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"Col_Shape_AABB",
   "isCompatibility":false,
   "isDnD":false,
