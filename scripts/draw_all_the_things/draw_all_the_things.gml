@@ -29,17 +29,15 @@ function draw_all_the_things(objects) {
     }
 
     var cutoff = dcos(60);
-    self.things_drawn = 0;
+    self.things_drawn = array_length(objects);
     
-    for (var i = 0, n = array_length(objects); i < n; i++) {
-        var tree = objects[i].reference;
-        matrix_set(matrix_world, tree.transform);
-        vertex_submit(tree.model, pr_trianglelist, -1);
-        self.things_drawn++;
-        if (self.draw_debug_shapes && i > 0) {
+    array_foreach(objects, function(tree) {
+        matrix_set(matrix_world, tree.reference.transform);
+        vertex_submit(tree.reference.model, pr_trianglelist, -1);
+        if (self.draw_debug_shapes) {
             vertex_submit(vb_collision_block, pr_trianglelist, -1);
         }
-    }
+    });
 
     if (self.ball != undefined) {
         matrix_set(matrix_world, matrix_build(self.ball.position.x, self.ball.position.y, self.ball.position.z, 0, 0, 0, 0.25, 0.25, 0.25));
