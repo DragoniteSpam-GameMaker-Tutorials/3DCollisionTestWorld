@@ -111,7 +111,7 @@ vb_collision_sphere = load("collision_sphere.vbuff", format);
 vb_collision_block = load("collision_block.vbuff", format);
 
 draw_debug_shapes = false;
-draw_frustum_view = true;
+draw_frustum_view = false;
 #endregion
 
 ball = undefined;
