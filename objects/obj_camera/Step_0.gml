@@ -108,6 +108,9 @@ if (keyboard_check_pressed(ord("F"))) {
 
 if (self.ball) {
     self.ball.Update();
+    if ((current_time - self.ball.time) > 30_000) {
+        self.ball = undefined;
+    }
 }
 
 var ww = os_browser == browser_not_a_browser ? window_get_width() : display_get_width();

@@ -38,6 +38,7 @@ function BallObject(position, velocity) constructor {
     self.position = position;
     self.velocity = velocity;
     self.stopped = false;
+    self.time = current_time;
     
     static Update = function() {
         var ray = new ColRay(self.position, self.velocity);
