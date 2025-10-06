@@ -67,7 +67,7 @@ function ColWorld(accelerator) constructor {
             var collided_with = self.accelerator.CheckObject(sphere_object);
             if (collided_with == undefined) break;
             
-            var displaced_position = collided_with.DisplaceSphere(sphere_object.shape);
+            var displaced_position = collided_with.shape.DisplaceSphere(sphere_object.shape);
             if (displaced_position == undefined) break;
             
             sphere_object.shape.Set(displaced_position);
