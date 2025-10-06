@@ -84,7 +84,8 @@ function ColWorld(accelerator) constructor {
     static GetObjectsInFrustum = function(frustum) {
         var output = [];
         self.accelerator.GetObjectsInFrustum(frustum, output);
-		array_unique_ext(output);
+		var n = array_unique_ext(output);
+        array_resize(output, n);
         return output;
     };
 }
