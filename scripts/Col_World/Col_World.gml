@@ -175,21 +175,24 @@ function ColWorldOctree(bounds, depth) constructor {
     };
     
     static CheckObject = function(object) {
-        if (!object.shape.CheckAABB(self.bounds)) return;
-        
-        if (self.children == undefined) {
-            var i = 0;
-            repeat (array_length(self.contents)) {
-                if (self.contents[i].CheckObject(object)) {
-                    return self.contents[i];
+        var to_check = [self];
+        while (array_length(to_check) > 0) {
+            var tree = to_check[0];
+            array_delete(to_check, 0, 1);
+            if (!object.shape.CheckAABB(tree.bounds)) continue;
+            if (tree.children == undefined) {
+                var i = 0;
+                repeat (array_length(tree.contents)) {
+                    if (tree.contents[i].shape.CheckObject(object)) {
+                        return tree.contents[i];
+                    }
+                    i++;
                 }
-                i++;
-            }
-        } else {
-            var i = 0;
-            repeat (array_length(self.children)) {
-                var recursive_result = self.children[i++].CheckObject(object);
-                if (recursive_result != undefined) return recursive_result;
+            } else {
+                var head = array_length(to_check);
+                var additions = array_length(tree.children);
+                array_resize(to_check, head + additions)
+                array_copy(to_check, head, tree.children, 0, additions);
             }
         }
         
