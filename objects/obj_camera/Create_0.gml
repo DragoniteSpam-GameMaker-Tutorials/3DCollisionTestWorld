@@ -6,6 +6,7 @@
 
 self.preview_surface = -1;
 self.things_drawn = 0;
+self.frustum_time = 0;
 
 vertex_format_begin();
 vertex_format_add_position_3d();
@@ -18,7 +19,7 @@ var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, -25), new Vector3(20
 var quadtree = new ColWorldQuadtree(bounds, 3);
 var octree = new ColWorldOctree(bounds, 3);
 var sph = new ColWorldSpatialHash(32);
-collision_world = new ColWorld(quadtree);
+collision_world = new ColWorld(octree);
 
 #region floor
 var x1 = -10000;

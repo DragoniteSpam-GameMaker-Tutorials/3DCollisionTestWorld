@@ -88,6 +88,22 @@ function ColWorld(accelerator) constructor {
         array_resize(output, n);
         return output;
     };
+    
+    static GetObjectsInFrustumFast = function(view_mat, proj_mat) {
+        var current_camera = camera_get_active();
+        static filter_camera = camera_create();
+        camera_set_view_mat(filter_camera, view_mat);
+        camera_set_proj_mat(filter_camera, proj_mat);
+        camera_apply(filter_camera);
+        matrix_set(matrix_view, view_mat);
+        matrix_set(matrix_projection, proj_mat);
+        var output = [];
+        self.accelerator.GetObjectsInFrustumFast(output);
+		var n = array_unique_ext(output);
+        array_resize(output, n);
+        camera_apply(current_camera);
+        return output;
+    };
 }
 
 function ColWorldOctree(bounds, depth) constructor {
@@ -219,6 +235,25 @@ function ColWorldOctree(bounds, depth) constructor {
         
         array_foreach(self.children, method({ frustum: frustum, output: output }, function(node) {
             node.GetObjectsInFrustum(self.frustum, self.output);
+        }));
+    };
+    
+    static GetObjectsInFrustumFast = function(output) {
+        var status = self.bounds.CheckFrustumFast();
+        
+        if (status == EFrustumResults.OUTSIDE)
+            return;
+        
+        if (self.children == undefined) {
+            var output_length = array_length(output);
+            var contents_length = array_length(self.contents);
+            array_resize(output, output_length + contents_length);
+            array_copy(output, output_length, self.contents, 0, contents_length);
+            return;
+        }
+        
+        array_foreach(self.children, method({ output: output }, function(node) {
+            node.GetObjectsInFrustumFast(self.output);
         }));
     };
 }
