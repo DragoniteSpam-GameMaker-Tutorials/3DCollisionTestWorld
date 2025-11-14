@@ -14,7 +14,9 @@
     {"$GMFolder":"","%Name":"Shapes","folderPath":"folders/Collision Stuff/Shapes.yy","name":"Shapes","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Demo","folderPath":"folders/Demo.yy","name":"Demo","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
-  "ForcedPrefabProjectReferences":[],
+  "ForcedPrefabProjectReferences":[
+    {"link":"io.gamemaker.sdfshaders-1.0.0","name":"io.gamemaker.sdfshaders-1.0.0","path":"io.gamemaker.sdfshaders-1.0.0.yyp",},
+  ],
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"collision_block.vbuff","CopyToMask":-1,"filePath":"datafiles","name":"collision_block.vbuff","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"collision_sphere.vbuff","CopyToMask":-1,"filePath":"datafiles","name":"collision_sphere.vbuff","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
@@ -31,7 +33,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.1400.0.904",
+    "IDEVersion":"2024.1400.1.926",
   },
   "name":"3DCollisionTestWorld",
   "resources":[

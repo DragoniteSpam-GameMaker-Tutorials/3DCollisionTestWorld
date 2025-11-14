@@ -81,15 +81,7 @@ function ColWorld(accelerator) constructor {
         return displaced_position;
     };
     
-    static GetObjectsInFrustum = function(frustum) {
-        var output = [];
-        self.accelerator.GetObjectsInFrustum(frustum, output);
-		var n = array_unique_ext(output);
-        array_resize(output, n);
-        return output;
-    };
-    
-    static GetObjectsInFrustumFast = function(view_mat, proj_mat) {
+    static GetObjectsInFrustum = function(view_mat, proj_mat) {
         var current_camera = camera_get_active();
         static filter_camera = camera_create();
         camera_set_view_mat(filter_camera, view_mat);
@@ -98,7 +90,7 @@ function ColWorld(accelerator) constructor {
         matrix_set(matrix_view, view_mat);
         matrix_set(matrix_projection, proj_mat);
         var output = [];
-        self.accelerator.GetObjectsInFrustumFast(output);
+        self.accelerator.GetObjectsInFrustum(output);
 		var n = array_unique_ext(output);
         array_resize(output, n);
         camera_apply(current_camera);
@@ -222,26 +214,7 @@ function ColWorldOctree(bounds, depth) constructor {
         return result;
     };
     
-    static GetObjectsInFrustum = function(frustum, output) {
-        var status = self.bounds.CheckFrustum(frustum);
-        
-        if (status == EFrustumResults.OUTSIDE)
-            return;
-        
-        if (status == EFrustumResults.INSIDE || self.children == undefined) {
-            var output_length = array_length(output);
-            var contents_length = array_length(self.contents);
-            array_resize(output, output_length + contents_length);
-            array_copy(output, output_length, self.contents, 0, contents_length);
-            return;
-        }
-        
-        array_foreach(self.children, method({ frustum: frustum, output: output }, function(node) {
-            node.GetObjectsInFrustum(self.frustum, self.output);
-        }));
-    };
-    
-    static GetObjectsInFrustumFast = function(output) {
+    static GetObjectsInFrustum = function(output) {
         var status = self.bounds.CheckFrustumFast();
         
         if (status == EFrustumResults.OUTSIDE)
@@ -256,7 +229,7 @@ function ColWorldOctree(bounds, depth) constructor {
         }
         
         array_foreach(self.children, method({ output: output }, function(node) {
-            node.GetObjectsInFrustumFast(self.output);
+            node.GetObjectsInFrustum(self.output);
         }));
     };
 }
