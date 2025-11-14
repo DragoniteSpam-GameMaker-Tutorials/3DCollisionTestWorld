@@ -5,8 +5,24 @@ if (self.tree_count_last != self.tree_count) {
 
 if (array_length(self.tree_objects) != self.tree_count) {
     if (current_time - self.tree_count_last_update > 500) {
-        self.SpawnTrees(self.tree_count);
+        self.SpawnTrees(self.tree_count, self.world_type, self.world_partition_depth);
     }
+}
+
+if (self.world_partition_depth_last != self.world_partition_depth) {
+    self.world_partition_depth_last = self.world_partition_depth;
+    self.world_partition_depth_last_update = current_time;
+}
+
+if (self.world_partition_depth_live != self.world_partition_depth) {
+    if (current_time - self.world_partition_depth_last_update > 500) {
+        self.SpawnTrees(self.tree_count, self.world_type, self.world_partition_depth);
+    }
+}
+
+if (self.world_type != self.world_type_last) {
+    self.world_type_last = self.world_type;
+    self.SpawnTrees(self.tree_count, self.world_type, self.world_partition_depth);
 }
 
 with (player) {

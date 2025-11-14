@@ -71,20 +71,40 @@ tree_models = [
     vb_tree_fat, vb_tree_fat_dark, vb_tree_plateau, vb_tree_plateau_dark
 ];
 
+enum EWorldTypes {
+    QUADTREE,
+    OCTREE
+}
+
 self.tree_count = (BUILD_FOR_WEB ? 1500 : 2000);
 self.tree_count_last = self.tree_count;
 self.world_setup_time = 0;
 self.tree_count_last_update = -1000;
+self.world_type = EWorldTypes.OCTREE;
+self.world_type_last = self.world_type;
+self.world_partition_depth = 3;
+self.world_partition_depth_last = self.world_partition_depth;
+self.world_partition_depth_last_update = -1000;
+self.world_partition_depth_live = self.world_partition_depth;
 
-self.SpawnTrees = function(tree_count) {
+self.SpawnTrees = function(tree_count, type, depth) {
     self.tree_count = tree_count;
+    self.world_partition_depth_live = depth;
     
     var bounds = NewColAABBFromMinMax(new Vector3(-2000, -2000, -25), new Vector3(2000, 2000, 250));
     var quadtree = new ColWorldQuadtree(bounds, 3);
     var octree = new ColWorldOctree(bounds, 3);
     var sph = new ColWorldSpatialHash(32);
-    collision_world = new ColWorld(octree);
-
+    
+    switch (type) {
+    case EWorldTypes.QUADTREE:
+        collision_world = new ColWorld(quadtree);
+        break;
+    case EWorldTypes.OCTREE:
+        collision_world = new ColWorld(octree);
+        break;
+    }
+    
     var t0 = get_timer();
     tree_objects = array_create(tree_count);
     tree_objects[0] = new FloorObject(vb_floor);
@@ -102,7 +122,7 @@ self.SpawnTrees = function(tree_count) {
     self.dbg_setup_time_text = $"Setup time: {self.world_setup_time} ms";
 }
 
-self.SpawnTrees(self.tree_count);
+self.SpawnTrees(self.tree_count, self.world_type, self.world_partition_depth);
 // if you bring this back you need to add it to SpawnTrees too
 /*
 tree_mesh = new TreeObject(vb_tree_plateau);
@@ -161,3 +181,5 @@ dbg_checkbox(ref_create(self, "draw_debug_shapes"), "Draw collision shapes (C)")
 dbg_checkbox(ref_create(self, "draw_frustum_view"), "Culling visualization (F)")
 
 dbg_slider_int(ref_create(self, "tree_count"), 500, 5000);
+dbg_drop_down(ref_create(self, "world_type"), "Quadtree:0,Octree:1");
+dbg_slider_int(ref_create(self, "world_partition_depth"), 0, 4);
