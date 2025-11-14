@@ -130,3 +130,22 @@ font_enable_effects(fnt_demo, true, {
     outlineColour: c_black,
     outlineAlpha: 1
 });
+
+self.dbg_setup_time_text = $"Setup time: {self.setup_time} ms";
+self.dbg_things_drawn_text = "";
+self.dbg_frustum_time_text = "";
+self.dbg_world_type_text = "";
+self.dbg_fps_text = "";
+
+dbg_view("General", true, -1, -1, 400, 300);
+dbg_text(ref_create(self, "dbg_setup_time_text"));
+dbg_text(ref_create(self, "dbg_things_drawn_text"));
+dbg_text(ref_create(self, "dbg_frustum_time_text"));
+dbg_text(ref_create(self, "dbg_world_type_text"));
+dbg_text(ref_create(self, "dbg_fps_text"));
+
+dbg_text("Press Tab to toggle mouse lock");
+dbg_text("Press T to throw a ball");
+
+dbg_checkbox(ref_create(self, "draw_debug_shapes"), "Draw collision shapes (C)")
+dbg_checkbox(ref_create(self, "draw_frustum_view"), "Culling visualization (F)")
