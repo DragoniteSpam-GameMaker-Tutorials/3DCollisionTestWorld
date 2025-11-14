@@ -11,7 +11,6 @@ proj_mat = matrix_build_projection_perspective_fov(-60, -16 / 9, 1, 800);
 var t = get_timer();
 var objects = self.collision_world.GetObjectsInFrustum(view_mat, proj_mat);
 self.frustum_time = (get_timer() - t) / 1000;
-show_debug_message($"Getting all the things in the frustum took {self.frustum_time} ms");
 
 var cam = camera_get_active();
 camera_set_view_mat(cam, view_mat);

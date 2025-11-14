@@ -1,4 +1,13 @@
-/// @description Insert description here
+if (self.tree_count_last != self.tree_count) {
+    self.tree_count_last = self.tree_count;
+    self.tree_count_last_update = current_time;
+}
+
+if (array_length(self.tree_objects) != self.tree_count) {
+    if (current_time - self.tree_count_last_update > 500) {
+        self.SpawnTrees(self.tree_count);
+    }
+}
 
 with (player) {
     if (window_mouse_get_locked()) {

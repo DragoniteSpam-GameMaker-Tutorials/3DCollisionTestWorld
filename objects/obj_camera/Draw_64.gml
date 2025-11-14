@@ -1,4 +1,4 @@
-self.dbg_things_drawn_text = $"Things drawn: {self.things_drawn}/{TREE_COUNT} things in world";
+self.dbg_things_drawn_text = $"Things drawn: {self.things_drawn}/{self.tree_count} things in world";
 self.dbg_frustum_time_text = $"Frustum time: {self.frustum_time} ms";
 self.dbg_world_type_text = $"World type: {instanceof(self.collision_world.accelerator)}";
 self.dbg_fps_text = $"FPS: {fps}/{fps_real}";
