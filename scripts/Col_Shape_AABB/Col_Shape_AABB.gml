@@ -22,7 +22,7 @@ function ColAABB(position, half_extents) constructor {
             new Vector3(pmax.x, pmax.y, pmax.z),
             new Vector3(pmax.x, pmax.y, pmin.z),
             new Vector3(pmax.x, pmin.y, pmax.z),
-            new Vector3(pmax.x, pmin.y, pmin.z),
+            new Vector3(pmax.x, pmin.y, pmin.z)
         ];
         
         var vertices = self.property_vertices;
@@ -39,7 +39,7 @@ function ColAABB(position, half_extents) constructor {
             new ColLine(vertices[0], vertices[4]),
             new ColLine(vertices[1], vertices[5]),
             new ColLine(vertices[2], vertices[6]),
-            new ColLine(vertices[3], vertices[7]),
+            new ColLine(vertices[3], vertices[7])
         ];
     };
     
@@ -67,8 +67,10 @@ function ColAABB(position, half_extents) constructor {
         var size = self.half_extents;
         var normal = plane.normal;
         var pos = self.position;
-        var anorm = normal.Abs();
-        var plength = dot_product_3d(anorm.x, anorm.y, anorm.z, size.x, size.y, size.z);
+        var anx = abs(normal.x);
+        var any = abs(normal.y);
+        var anz = abs(normal.z);
+        var plength = dot_product_3d(anx, any, anz, size.x, size.y, size.z);
         var ndot = dot_product_3d(normal.x, normal.y, normal.z, pos.x, pos.y, pos.z);
         return (abs(ndot - plane.distance) <= plength);
     };
@@ -145,16 +147,24 @@ function ColAABB(position, half_extents) constructor {
             var ay = axes[i++];
             var az = axes[i++];
         
-            var val_min_a = infinity;
-            var val_max_a = -infinity;
-            
-            var j = 0;
-            repeat (8) {
-                var vertex = vertices[j++];
-                var dot = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
-                val_min_a = min(val_min_a, dot);
-                val_max_a = max(val_max_a, dot);
-            }
+            var vertex = vertices[0];
+            var dot0 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[1];
+            var dot1 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[2];
+            var dot2 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[3];
+            var dot3 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[4];
+            var dot4 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[5];
+            var dot5 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[6];
+            var dot6 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            vertex = vertices[7];
+            var dot7 = dot_product_3d(ax, ay, az, vertex.x, vertex.y, vertex.z);
+            var val_min_a = min(dot0, dot1, dot2, dot3, dot4, dot5, dot6, dot7);
+            var val_max_a = max(dot0, dot1, dot2, dot3, dot4, dot5, dot6, dot7);
             
             var ada = dot_product_3d(ax, ay, az, tax, tay, taz);
             var adb = dot_product_3d(ax, ay, az, tbx, tby, tbz);
