@@ -148,6 +148,7 @@ vb_collision_block = load("collision_block.vbuff", format);
 
 draw_debug_shapes = false;
 draw_frustum_view = false;
+self.draw_debug_graphs = false;
 #endregion
 
 ball = undefined;
@@ -164,14 +165,27 @@ font_enable_effects(fnt_demo, true, {
 self.dbg_setup_time_text = $"Setup time: {self.world_setup_time} ms";
 self.dbg_things_drawn_text = "";
 self.dbg_frustum_time_text = "";
-self.dbg_world_type_text = "";
+self.dbg_player_step_time_text = "";
 self.dbg_fps_text = "";
 
-dbg_view("General", true, -1, -1, 400, 300);
+self.dbg_player_step_time_value = 0;
+
+enum EHistoryBufferValues {
+    FPS,
+    FRUSTUM_TIME,
+    STEP_TIME,
+    THINGS_DRAWN
+}
+
+self.history_buffer = ds_grid_create(300, 4);
+self.history_address = 0;
+self.history_address_max = 0;
+
+dbg_view("General", true, -1, -1, 400, 320);
 dbg_text(ref_create(self, "dbg_setup_time_text"));
 dbg_text(ref_create(self, "dbg_things_drawn_text"));
 dbg_text(ref_create(self, "dbg_frustum_time_text"));
-dbg_text(ref_create(self, "dbg_world_type_text"));
+dbg_text(ref_create(self, "dbg_player_step_time_text"));
 dbg_text(ref_create(self, "dbg_fps_text"));
 
 dbg_text("Press Tab to toggle mouse lock");
@@ -179,6 +193,7 @@ dbg_text("Press T to throw a ball");
 
 dbg_checkbox(ref_create(self, "draw_debug_shapes"), "Draw collision shapes (C)")
 dbg_checkbox(ref_create(self, "draw_frustum_view"), "Culling visualization (F)")
+dbg_checkbox(ref_create(self, "draw_debug_graphs"), "Performance readouts")
 
 dbg_slider_int(ref_create(self, "tree_count"), 500, 5000);
 dbg_drop_down(ref_create(self, "world_type"), "Quadtree:0,Octree:1");

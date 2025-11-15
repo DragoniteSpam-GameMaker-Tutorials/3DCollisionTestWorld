@@ -25,6 +25,7 @@ if (self.world_type != self.world_type_last) {
     self.SpawnTrees(self.tree_count, self.world_type, self.world_partition_depth);
 }
 
+var t0 = get_timer();
 with (player) {
     if (window_mouse_get_locked()) {
         #region regular movement
@@ -122,6 +123,9 @@ with (player) {
         window_mouse_set_locked(!window_mouse_get_locked());
     }
 }
+var t1 = get_timer();
+self.dbg_player_step_time_value = t1 - t0;
+self.dbg_player_step_time_text = $"Player step event time: {(t1 - t0) / 1000} ms";
 
 if (keyboard_check_pressed(ord("C"))) {
     draw_debug_shapes = !draw_debug_shapes;
