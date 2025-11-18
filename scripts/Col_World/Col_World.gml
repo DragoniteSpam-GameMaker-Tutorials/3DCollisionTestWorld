@@ -8,6 +8,96 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     static CheckObject = function(object) {
         if (object == self) return false;
         if ((self.mask & object.group) == 0) return false;
+        // this theoretically speeds up this method by quite a bit by cutting
+        // out one, possibly two, levels of indirect method calls, but in
+        // practice most of the time you'll be using the world collision checking
+        // methods, which don't actually call this
+        
+        var this_shape = self.shape;
+        var that_shape = object.shape;
+        
+        switch (instanceof(this_shape)) {
+            case "ColPoint": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return this_shape.CheckPoint(that_shape);
+                    case "ColSphere": return this_shape.CheckSphere(that_shape);
+                    case "ColAABB": return this_shape.CheckAABB(that_shape);
+                    case "ColOBB": return that_shape.CheckPoint(this_shape);
+                    case "ColPlane": return this_shape.CheckPlane(that_shape);
+                    case "ColCapsule": return that_shape.CheckPoint(this_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+            case "ColSphere": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return that_shape.CheckSphere(this_shape);
+                    case "ColSphere": return this_shape.CheckSphere(that_shape);
+                    case "ColAABB": return this_shape.CheckAABB(that_shape);
+                    case "ColOBB": return that_shape.CheckSphere(this_shape);
+                    case "ColPlane": return this_shape.CheckPlane(that_shape);
+                    case "ColCapsule": return that_shape.CheckSphere(this_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+            case "ColAABB": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return that_shape.CheckAABB(this_shape);
+                    case "ColSphere": return that_shape.CheckAABB(this_shape);
+                    case "ColAABB": return this_shape.CheckAABB(that_shape);
+                    case "ColOBB": return that_shape.CheckAABB(this_shape);
+                    case "ColPlane": return this_shape.CheckPlane(that_shape);
+                    case "ColCapsule": return that_shape.CheckAABB(this_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+            case "ColOBB": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return this_shape.CheckPoint(that_shape);
+                    case "ColSphere": return this_shape.CheckSphere(that_shape);
+                    case "ColAABB": return this_shape.CheckAABB(that_shape);
+                    case "ColOBB": return this_shape.CheckOBB(that_shape);
+                    case "ColPlane": return this_shape.CheckPlane(that_shape);
+                    case "ColCapsule": return that_shape.CheckOBB(this_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+            case "ColPlane": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return that_shape.CheckPlane(this_shape);
+                    case "ColSphere": return that_shape.CheckPlane(this_shape);
+                    case "ColAABB": return that_shape.CheckPlane(this_shape);
+                    case "ColOBB": return that_shape.CheckPlane(this_shape);
+                    case "ColPlane": return this_shape.CheckPlane(that_shape);
+                    case "ColCapsule": return that_shape.CheckPlane(this_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+            case "ColCapsule": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return this_shape.CheckPoint(that_shape);
+                    case "ColSphere": return this_shape.CheckSphere(that_shape);
+                    case "ColAABB": return this_shape.CheckAABB(that_shape);
+                    case "ColOBB": return this_shape.CheckOBB(that_shape);
+                    case "ColPlane": return this_shape.CheckPlane(that_shape);
+                    case "ColCapsule": return this_shape.CheckCapsule(that_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+            case "ColTriangle": {
+                switch (instanceof(that_shape)) {
+                    case "ColPoint": return that_shape.CheckTriangle(this_shape);
+                    case "ColSphere": return that_shape.CheckTriangle(this_shape);
+                    case "ColAABB": return that_shape.CheckTriangle(this_shape);
+                    case "ColOBB": return that_shape.CheckTriangle(this_shape);
+                    case "ColPlane": return that_shape.CheckTriangle(this_shape);
+                    case "ColCapsule": return that_shape.CheckTriangle(this_shape);
+                    case "ColTriangle": return this_shape.CheckTriangle(that_shape);
+                }
+            }
+        }
+        
+        // most of the remaining shapes aren't that useful and might as well be
+        // handled generically
         return self.shape.CheckObject(object);
     };
     
