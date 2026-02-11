@@ -125,11 +125,21 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
 function ColWorld(accelerator) constructor {
     self.accelerator = accelerator;
     
+    // sphere displacement gets a little difficult if planes (usually the floor)
+	// aren't handled first
+    self.planes = [];
+    
     static Add = function(object) {
+        if (instanceof(object.shape) == "ColPlane") {
+            array_push(self.planes, object);
+        }
         self.accelerator.Add(object);
     };
     
     static Remove = function(object) {
+        if (instanceof(object.shape) == "ColPlane") {
+            array_delete(self.planes, array_get_index(self.planes, object), 1);
+        }
         self.accelerator.Remove(object);
     };
     
@@ -157,7 +167,17 @@ function ColWorld(accelerator) constructor {
         var current_position = sphere_object.shape.position;
         
         repeat (attempts) {
-            var collided_with = self.accelerator.CheckObject(sphere_object);
+            // first try to find a plane you're in collision with
+            var collided_with = undefined;
+            for (var i = 0, n = array_length(self.planes); i < n; i++) {
+                if (self.planes[i].shape.CheckObject(sphere_object)) {
+                    collided_with = self.planes[i];
+                    break;
+                }
+            }
+            
+            // if you can't do that, look for a regular collision object
+            collided_with ??= self.accelerator.CheckObject(sphere_object);
             if (collided_with == undefined) break;
             
             var displaced_position = collided_with.shape.DisplaceSphere(sphere_object.shape);
@@ -167,7 +187,6 @@ function ColWorld(accelerator) constructor {
         }
         
         var displaced_position = sphere_object.shape.position;
-        sphere_object.shape.Set(current_position);
         if (current_position == displaced_position) return undefined;
         sphere_object.shape.Set(current_position);
         
@@ -285,7 +304,7 @@ function ColWorldGameMaker(fallback) constructor {
             }
         }
         
-        return self.fallback.CheckObject(object);
+        return undefined;
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
