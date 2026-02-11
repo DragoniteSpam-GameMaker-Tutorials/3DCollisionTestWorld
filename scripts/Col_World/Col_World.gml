@@ -191,14 +191,43 @@ function ColWorld(accelerator) constructor {
 }
 
 function ColWorldGameMaker(fallback) constructor {
+    static world_cleanup = undefined;
+    
+    self.world_id = string(ptr(self));
+    self.world_content = { };
+    
+    if (world_cleanup == undefined) {
+        world_cleanup = [];
+        call_later(13.37, time_source_units_seconds, function() {
+            for (var i = array_length(world_cleanup) - 1; i >= 0; i--) {
+                var data = world_cleanup[i];
+                if (!weak_ref_alive(data.ref)) {
+                    struct_foreach(data.content, function(key, value) {
+                        if (instance_exists(value.proxy)) {
+                            instance_destroy(value.proxy);
+                        }
+                    });
+                    array_delete(world_cleanup, i, 1);
+                }
+            };
+        }, true);
+    }
+    
+    array_push(world_cleanup, {
+        ref: weak_ref_create(self),
+        content: self.world_content
+    });
+    
     self.fallback = fallback;
     
     static Add = function(object) {
         self.fallback.Add(object);
         if (struct_exists(object.shape, "property_min") && object.shape.property_min != undefined) {
             if (!instance_exists(object.proxy)) {
+                self.world_content[$ string(ptr(object))] = object;
                 object.proxy = instance_create_depth(0, 0, 0, obj_col_proxy, {
-                    ref: object
+                    ref: object,
+                    world_id: self.world_id
                 });
             }
             
@@ -213,6 +242,10 @@ function ColWorldGameMaker(fallback) constructor {
     
     static Remove = function(object) {
         self.fallback.Remove(object);
+        if (instance_exists(object.proxy)) {
+            struct_remove(self.world_content, string(ptr(object)));
+            instance_destroy(object.proxy);
+        }
     };
     
     static CheckObject = function(object) {
@@ -236,8 +269,9 @@ function ColWorldGameMaker(fallback) constructor {
             with (object.proxy) {
                 var n = instance_place_list(self.x, self.y, obj_col_proxy, hits, false);
                 for (var i = 0; i < n; i++) {
-                    if (hits[| i].ref.CheckObject(object)) {
-                        return hits[| i].ref;
+                    var thing = hits[| i];
+                    if (thing.world_id == other.world_id && thing.ref.CheckObject(object)) {
+                        return thing.ref;
                     }
                 }
             }
