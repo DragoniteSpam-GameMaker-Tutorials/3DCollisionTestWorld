@@ -3,7 +3,9 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     self.reference = reference;
     self.mask = mask;                                   // what other objects can collide with me
     self.group = group;                                 // what masks i can detect collisions with
-	shape.object = self;
+    shape.object = self;
+    
+    self.proxy = undefined;
     
     static CheckObject = function(object) {
         if (object == self) return false;
@@ -143,8 +145,8 @@ function ColWorld(accelerator) constructor {
         var hit_info = new RaycastHitInformation();
         
         if (self.accelerator.CheckRay(ray, hit_info, group)) {
-			if (hit_info.distance <= distance)
-	            return hit_info;
+            if (hit_info.distance <= distance)
+                return hit_info;
         }
         
         return undefined;
@@ -181,10 +183,75 @@ function ColWorld(accelerator) constructor {
         matrix_set(matrix_projection, proj_mat);
         var output = [];
         self.accelerator.GetObjectsInFrustum(output);
-		var n = array_unique_ext(output);
+        var n = array_unique_ext(output);
         array_resize(output, n);
         camera_apply(current_camera);
         return output;
+    };
+}
+
+function ColWorldGameMaker(fallback) constructor {
+    self.fallback = fallback;
+    
+    static Add = function(object) {
+        self.fallback.Add(object);
+        if (struct_exists(object.shape, "property_min") && object.shape.property_min != undefined) {
+            if (!instance_exists(object.proxy)) {
+                object.proxy = instance_create_depth(0, 0, 0, obj_col_proxy, {
+                    ref: object
+                });
+            }
+            
+            with (object) {
+                self.proxy.x = self.shape.property_min.x;
+                self.proxy.y = self.shape.property_min.y;
+                self.proxy.image_xscale = self.shape.property_max.x - self.proxy.x;
+                self.proxy.image_yscale = self.shape.property_max.y - self.proxy.y;
+            }
+        }
+    };
+    
+    static Remove = function(object) {
+        self.fallback.Remove(object);
+    };
+    
+    static CheckObject = function(object) {
+        static hits = ds_list_create();
+        ds_list_clear(hits);
+        
+        if (!instance_exists(object.proxy)) {
+            object.proxy = instance_create_depth(0, 0, 0, obj_col_proxy, {
+                ref: object
+            });
+        }
+        
+        with (object) {
+            self.proxy.x = self.shape.property_min.x;
+            self.proxy.y = self.shape.property_min.y;
+            self.proxy.image_xscale = self.shape.property_max.x - self.proxy.x;
+            self.proxy.image_yscale = self.shape.property_max.y - self.proxy.y;
+        }
+        
+        if (instance_exists(object.proxy)) {
+            with (object.proxy) {
+                var n = instance_place_list(self.x, self.y, obj_col_proxy, hits, false);
+                for (var i = 0; i < n; i++) {
+                    if (hits[| i].ref.CheckObject(object)) {
+                        return hits[| i].ref;
+                    }
+                }
+            }
+        }
+        
+        return self.fallback.CheckObject(object);
+    };
+    
+    static CheckRay = function(ray, hit_info, group = 1) {
+        return self.fallback.CheckRay(ray, hit_info, group);
+    };
+    
+    static GetObjectsInFrustum = function(output) {
+        self.fallback.GetObjectsInFrustum(output);
     };
 }
 
@@ -248,11 +315,11 @@ function ColWorldOctree(bounds, depth) constructor {
         var index = array_get_index(self.contents, object);
         if (index != -1) {
             array_delete(self.contents, index, 1);
-			if (self.children != undefined) {
-	            array_foreach(self.children, method({ object: object }, function(subdivision) {
-	                subdivision.Remove(self.object);
-	            }));
-			}
+            if (self.children != undefined) {
+                array_foreach(self.children, method({ object: object }, function(subdivision) {
+                    subdivision.Remove(self.object);
+                }));
+            }
         }
     };
     

@@ -73,7 +73,8 @@ tree_models = [
 
 enum EWorldTypes {
     QUADTREE,
-    OCTREE
+    OCTREE,
+    GAMEMAKER
 }
 
 self.tree_count = (BUILD_FOR_WEB ? 1500 : 2000);
@@ -95,6 +96,7 @@ self.SpawnTrees = function(tree_count, type, depth) {
     var quadtree = new ColWorldQuadtree(bounds, 3);
     var octree = new ColWorldOctree(bounds, 3);
     var sph = new ColWorldSpatialHash(32);
+    var inst = new ColWorldGameMaker(quadtree);
     
     switch (type) {
     case EWorldTypes.QUADTREE:
@@ -102,6 +104,9 @@ self.SpawnTrees = function(tree_count, type, depth) {
         break;
     case EWorldTypes.OCTREE:
         collision_world = new ColWorld(octree);
+        break;
+    case EWorldTypes.GAMEMAKER:
+        collision_world = new ColWorld(inst);
         break;
     }
     
@@ -196,5 +201,5 @@ dbg_checkbox(ref_create(self, "draw_frustum_view"), "Culling visualization (F)")
 dbg_checkbox(ref_create(self, "draw_debug_graphs"), "Performance readouts")
 
 dbg_slider_int(ref_create(self, "tree_count"), 500, 5000);
-dbg_drop_down(ref_create(self, "world_type"), "Quadtree:0,Octree:1");
+dbg_drop_down(ref_create(self, "world_type"), "Quadtree:0,Octree:1,GameMaker:2");
 dbg_slider_int(ref_create(self, "world_partition_depth"), 0, 4);

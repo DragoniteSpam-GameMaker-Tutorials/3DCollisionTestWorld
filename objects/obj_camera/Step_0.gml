@@ -27,7 +27,7 @@ if (self.world_type != self.world_type_last) {
 
 var t0 = get_timer();
 with (player) {
-    if (window_mouse_get_locked()) {
+    if (window_mouse_get_locked() || true) {
         #region regular movement
         direction -= window_mouse_get_delta_x() / 10;
         pitch -= window_mouse_get_delta_y() / 10;

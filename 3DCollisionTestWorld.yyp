@@ -33,13 +33,14 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.1.208",
+    "IDEVersion":"2024.14.2.213",
   },
   "name":"3DCollisionTestWorld",
   "resources":[
     {"id":{"name":"fnt_demo","path":"fonts/fnt_demo/fnt_demo.yy",},},
     {"id":{"name":"Col_Changelog","path":"notes/Col_Changelog/Col_Changelog.yy",},},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},},
+    {"id":{"name":"obj_col_proxy","path":"objects/obj_col_proxy/obj_col_proxy.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"Col_Camera_Frustum","path":"scripts/Col_Camera_Frustum/Col_Camera_Frustum.yy",},},
     {"id":{"name":"Col_Config","path":"scripts/Col_Config/Col_Config.yy",},},
@@ -68,6 +69,7 @@
     {"id":{"name":"duck_front","path":"sprites/duck_front/duck_front.yy",},},
     {"id":{"name":"duck_left","path":"sprites/duck_left/duck_left.yy",},},
     {"id":{"name":"duck_right","path":"sprites/duck_right/duck_right.yy",},},
+    {"id":{"name":"spr_col_proxy","path":"sprites/spr_col_proxy/spr_col_proxy.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
