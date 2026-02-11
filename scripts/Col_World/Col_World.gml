@@ -6,6 +6,7 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     shape.object = self;
     
     self.proxy = undefined;
+    self.world_id = "";
     
     static CheckObject = function(object) {
         if (object == self) return false;
@@ -221,6 +222,12 @@ function ColWorldGameMaker(fallback) constructor {
     self.fallback = fallback;
     
     static Add = function(object) {
+        if (!COL_RELEASE_MODE) {
+            if (object.world_id != "") {
+                show_error("Collision object is already owned by another world, don't do that", true);
+            }
+            object.world_id = self.world_id;
+        }
         self.fallback.Add(object);
         if (struct_exists(object.shape, "property_min") && object.shape.property_min != undefined) {
             if (!instance_exists(object.proxy)) {
@@ -242,6 +249,7 @@ function ColWorldGameMaker(fallback) constructor {
     
     static Remove = function(object) {
         self.fallback.Remove(object);
+        object.world_id = "";
         if (instance_exists(object.proxy)) {
             struct_remove(self.world_content, string(ptr(object)));
             instance_destroy(object.proxy);
