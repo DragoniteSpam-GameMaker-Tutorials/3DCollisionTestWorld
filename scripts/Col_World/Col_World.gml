@@ -126,7 +126,7 @@ function ColWorld(accelerator) constructor {
     self.accelerator = accelerator;
     
     // sphere displacement gets a little difficult if planes (usually the floor)
-	// aren't handled first
+    // aren't handled first
     self.planes = [];
     
     static Add = function(object) {
@@ -308,7 +308,31 @@ function ColWorldGameMaker(fallback) constructor {
     };
     
     static CheckRay = function(ray, hit_info, group = 1) {
-        return self.fallback.CheckRay(ray, hit_info, group);
+        static max_dist = 100_000;
+        static hits = ds_list_create();
+        ds_list_clear(hits);
+        var x1 = ray.origin.x;
+        var y1 = ray.origin.y;
+        var x2 = x1 + max_dist * ray.direction.x;
+        var y2 = y1 + max_dist * ray.direction.y;
+        
+        // if the ray is pointing perfect into (or out of) the XY plane, use a point check
+        var n = 0;
+        if (point_distance(x1, y1, x2, y2) == 0) {
+            n = collision_point_list(x1, y1, obj_col_proxy, false, true, hits, false);
+        } else {
+            n = collision_line_list(x1, y1, x2, y2, obj_col_proxy, false, true, hits, false);
+        }
+        
+        var result = false;
+        var i = 0;
+        repeat (n) {
+            if (hits[| i++].ref.CheckRay(ray, hit_info, group)) {
+                result = true;
+            }
+        }
+        
+        return result;
     };
     
     static GetObjectsInFrustum = function(output) {
