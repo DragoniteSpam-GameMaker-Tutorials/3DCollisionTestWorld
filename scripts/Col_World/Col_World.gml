@@ -221,7 +221,7 @@ function ColWorld(accelerator) constructor {
     };
 }
 
-function ColWorldGameMaker(fallback) constructor {
+function ColWorldGameMaker() constructor {
     static world_cleanup = undefined;
     
     self.world_id = string(ptr(self));
@@ -249,8 +249,6 @@ function ColWorldGameMaker(fallback) constructor {
         content: self.world_content
     });
     
-    self.fallback = fallback;
-    
     static Add = function(object) {
         if (!COL_RELEASE_MODE) {
             if (object.world_id != "") {
@@ -258,7 +256,6 @@ function ColWorldGameMaker(fallback) constructor {
             }
             object.world_id = self.world_id;
         }
-        self.fallback.Add(object);
         if (struct_exists(object.shape, "property_min") && object.shape.property_min != undefined) {
             if (!instance_exists(object.proxy)) {
                 self.world_content[$ string(ptr(object))] = object;
@@ -278,7 +275,6 @@ function ColWorldGameMaker(fallback) constructor {
     };
     
     static Remove = function(object) {
-        self.fallback.Remove(object);
         object.world_id = "";
         if (instance_exists(object.proxy)) {
             struct_remove(self.world_content, string(ptr(object)));
@@ -347,7 +343,48 @@ function ColWorldGameMaker(fallback) constructor {
     };
     
     static GetObjectsInFrustum = function(output) {
-        self.fallback.GetObjectsInFrustum(output);
+		static view_mat = matrix_build_identity();
+		static proj_mat = matrix_build_identity();
+		static xx = array_create(8);
+		static yy = array_create(8);
+		matrix_get(matrix_view, view_mat);
+		matrix_get(matrix_projection, proj_mat);
+		
+        var frustum = new ColCameraFrustum(view_mat, proj_mat);
+		var corners = frustum.GetCorners();
+		xx[0] = corners[0].x;
+		xx[1] = corners[1].x;
+		xx[2] = corners[2].x;
+		xx[3] = corners[3].x;
+		xx[4] = corners[4].x;
+		xx[5] = corners[5].x;
+		xx[6] = corners[6].x;
+		xx[7] = corners[7].x;
+		yy[0] = corners[0].y;
+		yy[1] = corners[1].y;
+		yy[2] = corners[2].y;
+		yy[3] = corners[3].y;
+		yy[4] = corners[4].y;
+		yy[5] = corners[5].y;
+		yy[6] = corners[6].y;
+		yy[7] = corners[7].y;
+		
+		var xmin = script_execute_ext(min, xx);
+		var xmax = script_execute_ext(max, xx);
+		var ymin = script_execute_ext(min, yy);
+		var ymax = script_execute_ext(max, yy);
+		
+		static hits = ds_list_create();
+		ds_list_clear(hits);
+		
+		var n = collision_rectangle_list(xmin, ymin, xmax, ymax, obj_col_proxy, false, true, hits, false);
+		
+		for (var i = 0; i < n; i++) {
+			var thing = hits[| i];
+			if (thing.world_id == self.world_id) {
+				array_push(output, thing.ref);
+			}
+		}
     };
 }
 
