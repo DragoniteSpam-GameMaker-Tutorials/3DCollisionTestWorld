@@ -132,35 +132,45 @@ function ColWorld(accelerator) constructor {
     static Add = function(object) {
         if (instanceof(object.shape) == "ColPlane") {
             array_push(self.planes, object);
+        } else {
+            self.accelerator.Add(object);
         }
-        self.accelerator.Add(object);
     };
     
     static Remove = function(object) {
         if (instanceof(object.shape) == "ColPlane") {
             array_delete(self.planes, array_get_index(self.planes, object), 1);
+        } else {
+            self.accelerator.Remove(object);
         }
-        self.accelerator.Remove(object);
     };
     
     static Update = function(object) {
-        self.Remove(object);
-        self.Add(object);
+        if (instanceof(object.shape) != "ColPlane") {
+            self.Remove(object);
+            self.Add(object);
+        }
     };
     
     static CheckObject = function(object) {
+        for (var i = 0, n = array_length(self.planes); i < n; i++) {
+            if (self.planes[i].CheckObject(object)) {
+                return self.planes[i];
+            }
+        }
         return self.accelerator.CheckObject(object);
     };
     
     static CheckRay = function(ray, group = 1, distance = infinity) {
         var hit_info = new RaycastHitInformation();
         
-        if (self.accelerator.CheckRay(ray, hit_info, group)) {
-            if (hit_info.distance <= distance)
-                return hit_info;
+        for (var i = 0, n = array_length(self.planes); i < n; i++) {
+            self.planes[i].CheckRay(ray, hit_info, group);
         }
         
-        return undefined;
+        self.accelerator.CheckRay(ray, hit_info, group);
+        
+        return (hit_info.distance <= distance) ? hit_info : undefined;
     };
     
     static DisplaceSphere = function(sphere_object, attempts = COL_DEFAULT_SPHERE_DISPLACEMENT_ATTEMPTS) {
@@ -201,7 +211,8 @@ function ColWorld(accelerator) constructor {
         camera_apply(filter_camera);
         matrix_set(matrix_view, view_mat);
         matrix_set(matrix_projection, proj_mat);
-        var output = [];
+        // assuming planes are in the frustum by default is easier than calculating them
+        var output = variable_clone(self.planes);
         self.accelerator.GetObjectsInFrustum(output);
         var n = array_unique_ext(output);
         array_resize(output, n);
