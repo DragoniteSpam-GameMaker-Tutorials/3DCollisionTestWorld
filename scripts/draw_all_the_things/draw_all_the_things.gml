@@ -32,6 +32,7 @@ function draw_all_the_things(objects) {
     self.things_drawn = array_length(objects);
     
     array_foreach(objects, function(tree) {
+        if (tree.reference == player) return;
         matrix_set(matrix_world, tree.reference.transform);
         vertex_submit(tree.reference.model, pr_trianglelist, -1);
         if (self.draw_debug_shapes) {

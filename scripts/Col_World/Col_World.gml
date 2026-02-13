@@ -6,7 +6,6 @@ function ColObject(shape, reference, mask = 1, group = 1) constructor {
     shape.object = self;
     
     self.proxy = undefined;
-    self.world_id = "";
     
     static CheckObject = function(object) {
         if (object == self) return false;
@@ -204,6 +203,15 @@ function ColWorld(accelerator) constructor {
     };
     
     static GetObjectsInFrustum = function(view_mat, proj_mat) {
+        // assuming planes are in the frustum by default is easier than calculating them
+        var output = variable_clone(self.planes);
+        
+        // gamemaker worlds aren't recursive
+        if (self.accelerator.self_contained_frustum_check) {
+            self.accelerator.GetObjectsInFrustum(output, view_mat, proj_mat);
+            return output;
+        }
+        
         var current_camera = camera_get_active();
         static filter_camera = camera_create();
         camera_set_view_mat(filter_camera, view_mat);
@@ -211,8 +219,6 @@ function ColWorld(accelerator) constructor {
         camera_apply(filter_camera);
         matrix_set(matrix_view, view_mat);
         matrix_set(matrix_projection, proj_mat);
-        // assuming planes are in the frustum by default is easier than calculating them
-        var output = variable_clone(self.planes);
         self.accelerator.GetObjectsInFrustum(output);
         var n = array_unique_ext(output);
         array_resize(output, n);
@@ -224,7 +230,7 @@ function ColWorld(accelerator) constructor {
 function ColWorldGameMaker() constructor {
     static world_cleanup = undefined;
     
-    self.world_id = string(ptr(self));
+    self.self_contained_frustum_check = true;
     self.world_content = { };
     
     if (world_cleanup == undefined) {
@@ -250,18 +256,11 @@ function ColWorldGameMaker() constructor {
     });
     
     static Add = function(object) {
-        if (!COL_RELEASE_MODE) {
-            if (object.world_id != "") {
-                show_error("Collision object is already owned by another world, don't do that", true);
-            }
-            object.world_id = self.world_id;
-        }
         if (struct_exists(object.shape, "property_min") && object.shape.property_min != undefined) {
             if (!instance_exists(object.proxy)) {
                 self.world_content[$ string(ptr(object))] = object;
                 object.proxy = instance_create_depth(0, 0, 0, obj_col_proxy, {
-                    ref: object,
-                    world_id: self.world_id
+                    ref: object
                 });
             }
             
@@ -275,7 +274,6 @@ function ColWorldGameMaker() constructor {
     };
     
     static Remove = function(object) {
-        object.world_id = "";
         if (instance_exists(object.proxy)) {
             struct_remove(self.world_content, string(ptr(object)));
             instance_destroy(object.proxy);
@@ -304,7 +302,7 @@ function ColWorldGameMaker() constructor {
                 var n = instance_place_list(self.x, self.y, obj_col_proxy, hits, false);
                 for (var i = 0; i < n; i++) {
                     var thing = hits[| i];
-                    if (thing.world_id == other.world_id && thing.ref.CheckObject(object)) {
+                    if (thing.ref.CheckObject(object)) {
                         return thing.ref;
                     }
                 }
@@ -342,55 +340,48 @@ function ColWorldGameMaker() constructor {
         return result;
     };
     
-    static GetObjectsInFrustum = function(output) {
-		static view_mat = matrix_build_identity();
-		static proj_mat = matrix_build_identity();
-		static xx = array_create(8);
-		static yy = array_create(8);
-		matrix_get(matrix_view, view_mat);
-		matrix_get(matrix_projection, proj_mat);
-		
+    static GetObjectsInFrustum = function(output, view_mat, proj_mat) {
+        static xx = array_create(8);
+        static yy = array_create(8);
+        
         var frustum = new ColCameraFrustum(view_mat, proj_mat);
-		var corners = frustum.GetCorners();
-		xx[0] = corners[0].x;
-		xx[1] = corners[1].x;
-		xx[2] = corners[2].x;
-		xx[3] = corners[3].x;
-		xx[4] = corners[4].x;
-		xx[5] = corners[5].x;
-		xx[6] = corners[6].x;
-		xx[7] = corners[7].x;
-		yy[0] = corners[0].y;
-		yy[1] = corners[1].y;
-		yy[2] = corners[2].y;
-		yy[3] = corners[3].y;
-		yy[4] = corners[4].y;
-		yy[5] = corners[5].y;
-		yy[6] = corners[6].y;
-		yy[7] = corners[7].y;
-		
-		var xmin = script_execute_ext(min, xx);
-		var xmax = script_execute_ext(max, xx);
-		var ymin = script_execute_ext(min, yy);
-		var ymax = script_execute_ext(max, yy);
-		
-		static hits = ds_list_create();
-		ds_list_clear(hits);
-		
-		var n = collision_rectangle_list(xmin, ymin, xmax, ymax, obj_col_proxy, false, true, hits, false);
-		
-		for (var i = 0; i < n; i++) {
-			var thing = hits[| i];
-			if (thing.world_id == self.world_id) {
-				array_push(output, thing.ref);
-			}
-		}
+        var corners = frustum.GetCorners();
+        xx[0] = corners[0].x;
+        xx[1] = corners[1].x;
+        xx[2] = corners[2].x;
+        xx[3] = corners[3].x;
+        xx[4] = corners[4].x;
+        xx[5] = corners[5].x;
+        xx[6] = corners[6].x;
+        xx[7] = corners[7].x;
+        yy[0] = corners[0].y;
+        yy[1] = corners[1].y;
+        yy[2] = corners[2].y;
+        yy[3] = corners[3].y;
+        yy[4] = corners[4].y;
+        yy[5] = corners[5].y;
+        yy[6] = corners[6].y;
+        yy[7] = corners[7].y;
+        
+        var xmin = script_execute_ext(min, xx);
+        var xmax = script_execute_ext(max, xx);
+        var ymin = script_execute_ext(min, yy);
+        var ymax = script_execute_ext(max, yy);
+        
+        static hits = ds_list_create();
+        ds_list_clear(hits);
+        
+        var i = 0;
+        repeat (collision_rectangle_list(xmin, ymin, xmax, ymax, obj_col_proxy, false, true, hits, false)) {
+            array_push(output, hits[| i++].ref);
+        }
     };
 }
 
 function ColWorldOctree(bounds, depth) constructor {
     self.bounds = bounds;
     self.depth = depth;
+    self.self_contained_frustum_check = false;
     
     self.contents = [];
     self.children = undefined;
