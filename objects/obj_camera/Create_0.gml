@@ -8,6 +8,9 @@ self.preview_surface = -1;
 self.things_drawn = 0;
 self.frustum_time = 0;
 
+view_mat = matrix_build_identity();
+proj_mat = matrix_build_identity();
+
 vertex_format_begin();
 vertex_format_add_position_3d();
 vertex_format_add_normal();
@@ -96,7 +99,7 @@ self.SpawnTrees = function(tree_count, type, depth) {
     var quadtree = new ColWorldQuadtree(bounds, 3);
     var octree = new ColWorldOctree(bounds, 3);
     var sph = new ColWorldSpatialHash(32);
-    var inst = new ColWorldGameMaker(quadtree);
+    var inst = new ColWorldGameMaker();
     
     switch (type) {
     case EWorldTypes.QUADTREE:
